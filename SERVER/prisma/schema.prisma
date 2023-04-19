@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Trip {
+  id       Int    @id @default(autoincrement())
+  name     String
+  user     String
+  depCity  String
+  arrCity  String
+  budget   Float
+  duration Int
+  // activities Activity[]
+}
+
+model Journey {
+  id            Int      @id @default(autoincrement())
+  start         DateTime
+  end           DateTime
+  depCity       String
+  arrCity       String
+  price         Float
+  transportType String
+}
+
+model Activity {
+  id             Int      @id @default(autoincrement())
+  start          DateTime
+  end            DateTime
+  depCity        String
+  arrCity        String?
+  price          Float
+  activityType   String
+  additionalInfo String?
+}
