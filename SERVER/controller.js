@@ -5,9 +5,11 @@ const controller = {};
 
 controller.getAllTrips = async (req, res) => {
   try {
+    console.log("I am inside the getallTrips");
     //   const trips = await prisma.trip.findMany({ include: { activities: true } });
     const trips = await prisma.trip.findMany({});
-    res.json(trips);
+    const response = res.json(trips);
+    res.send(response);
     res.status(200);
   } catch (error) {
     console.log(error);

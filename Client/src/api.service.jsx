@@ -66,7 +66,7 @@ export const postActivity = async(activity)=>{
 export const getTrip = async (id) =>{
     try {
         console.log("function get trip by id called inside front end");
-        const response = await axios.get(`${url}/trip/${id}`)
+        const response = await axios.get(`${url}trip/${id}`)
         return response.data
     } catch (error) {
         console.log(error);
@@ -76,8 +76,9 @@ export const getTrip = async (id) =>{
 export const getAllTrips = async () =>{
     try {
         const response = await fetch(url +"result")
-        const allTrips = await response.json()
-        return allTrips
+        const res = response.json()
+        // const allTrips = await response.json()
+        return res
     } catch (error) {
         console.log(error);
     }

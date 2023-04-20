@@ -17,19 +17,19 @@ function Trip() {
         setTrip(data);
       };
       fetchTrip();
-    }, [id.idTrip]);
+    }, []);
   
   
     console.log("trip", trip);
     return (
       <div className="Trip">
-      <h1>{trip.name}</h1>
-      <p>User: {trip.user}</p>
-      <p>Departure City: {trip.depCity}</p>
-      <p>Arrival City: {trip.arrCity}</p>
-      <p>Budget: {trip.budget}</p>
-      <p>Duration: {trip.duration}</p>
-
+            <h1>{ trip && trip.name}</h1>
+      <p>User: { trip && trip.user}</p>
+      <p>Departure City: { trip && trip.depCity}</p>
+      <p>Arrival City: { trip && trip.arrCity}</p>
+      <p>Budget: { trip && trip.budget}</p>
+      <p>Duration: { trip && trip.duration}</p>
+            
        <Link to="/activity">
             <button className="button">Post an Activity</button>
         </Link>
