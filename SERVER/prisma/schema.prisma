@@ -18,6 +18,9 @@ model Trip {
   arrCity  String
   budget   Float
   duration Int
+  // activities String[]
+  // journeys   String[]
+
   // activities Activity[]
 }
 

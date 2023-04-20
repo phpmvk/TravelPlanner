@@ -1,20 +1,26 @@
 import { useState } from 'react'
-import Logo from './assets/Logo2.png'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
+import Home from './Components/Home'
+import Post from './Components/Post'
+import Explore from './Components/Explore'
+import Activity from './Components/Activity'
+import Journey from './Components/Journey'
+
 import './App.css'
 
 function App() {
-  // const [count, setCount] = useState(0)
-
   return (
-    <div className="App">
-     {/* <h1>Hello</h1> */}
-     <img src={Logo} alt="logo" width="500px" className='imgLog'/>
-     <div className='buttons'>
-     <button>Explore</button>
-     <button>Post</button>
-     </div>
-    </div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route exact path="/" element={<Home />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/post" element={<Post />} />
+        <Route path="/journey" element={<Journey />} />
+        <Route path="/activity" element={<Activity />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
 export default App
