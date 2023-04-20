@@ -12,9 +12,9 @@ const postTrip = async(trip)=>{
         }
     })
     console.log(response);
-    const trips = await response.json()
-    console.log(trips);
-    return trips 
+    const tripCreated = await response.json()
+    console.log(tripCreated);
+    return tripCreated;
     } catch (error) {
         console.log(error);
     }

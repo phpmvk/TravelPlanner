@@ -42,7 +42,9 @@ function Journey() {
             <input className="inputs" placeholder="Price"></input>
                 <h4>TransportType</h4>
             <input className="inputs" placeholder="Duration"></input>
-            <button className="button" type="submit">Create</button>
+            <Link to="/post">
+                <button className="button" type="submit">Create</button>
+            </Link>
         </form>
 
        <Link to="/post">

@@ -1,9 +1,12 @@
 import { postTrip } from "../api.service";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 
 function Post() {
   
     // const [error, setError] = useState('');
+
+    const navigate = useNavigate();
 
     const handleSubmit = async function(e){
     // setError("")
@@ -28,7 +31,11 @@ function Post() {
     }
 
     // Send to back-End
-    const res= await postTrip(newTrip)
+    const res = await postTrip(newTrip)
+
+    if (res.id) {
+        navigate(`/trip/${res.id}`)
+    }
     
     e.target.reset()
     }
@@ -58,12 +65,7 @@ function Post() {
             <Link to="/">
                 <button className="button">Home</button>
             </Link>
-            <Link to="/activity">
-                <button className="button">Post an Activity</button>
-            </Link>
-            <Link to="/journey">
-                <button className="button">Post a Journey</button>
-            </Link>
+
 
         </div>
       );
