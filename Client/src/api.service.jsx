@@ -1,6 +1,8 @@
+import axios from 'axios';
+
 const url = "http://localhost:3001/";
 
-const postTrip = async(trip)=>{
+export const postTrip = async(trip)=>{
     try {
         console.log("posting");
         const response = await fetch(url+"post",{
@@ -20,7 +22,7 @@ const postTrip = async(trip)=>{
     }
 }
 
-const postJourney = async(journey)=>{
+export const postJourney = async(journey)=>{
     try {
         console.log("posting");
         const response = await fetch(url+"journey",{
@@ -41,7 +43,7 @@ const postJourney = async(journey)=>{
 }
 
 
-const postActivity = async(activity)=>{
+export const postActivity = async(activity)=>{
     try {
         console.log("posting");
         const response = await fetch(url+"activity",{
@@ -61,4 +63,25 @@ const postActivity = async(activity)=>{
     }
 }
 
-export { postTrip, postJourney, postActivity }
+export const getTrip = async (id) =>{
+    try {
+        console.log("function get trip by id called inside front end");
+        const response = await axios.get(`${url}/trip/${id}`)
+        return response.data
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const getAllTrips = async () =>{
+    try {
+        const response = await fetch(url +"result")
+        const allTrips = await response.json()
+        return allTrips
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+// export { postTrip, postJourney, postActivity, getTrip, getAllTrips }

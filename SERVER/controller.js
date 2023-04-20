@@ -15,6 +15,23 @@ controller.getAllTrips = async (req, res) => {
   }
 };
 
+controller.getTripById = async (req, res) => {
+  console.log("function called");
+  const { id } = req.params;
+  try {
+    const trips = await prisma.trip.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.json(trips);
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
 controller.createTrip = async (req, res) => {
   try {
     const trip = await prisma.trip.create({
@@ -25,6 +42,7 @@ controller.createTrip = async (req, res) => {
         arrCity: req.body.arrCity,
         budget: req.body.budget,
         duration: req.body.duration,
+
         // activities: {
         //   create: req.body.activities,
         // },
