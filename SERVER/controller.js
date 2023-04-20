@@ -39,4 +39,45 @@ controller.createTrip = async (req, res) => {
   }
 };
 
+controller.createJourney = async (req, res) => {
+  try {
+    const journey = await prisma.journey.create({
+      data: {
+        start: req.body.start,
+        end: req.body.end,
+        depCity: req.body.depCity,
+        arrCity: req.body.arrCity,
+        price: req.body.price,
+        transportType: req.body.transportType,
+      },
+    });
+    res.json(journey);
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
+controller.createActivity = async (req, res) => {
+  try {
+    const activity = await prisma.activity.create({
+      data: {
+        start: req.body.start,
+        end: req.body.end,
+        depCity: req.body.depCity,
+        arrCity: req.body.arrCity,
+        price: req.body.price,
+        activityType: req.body.activityType,
+        additionalInfo: req.body.additionalInfo,
+      },
+    });
+    res.json(activity);
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
 module.exports = controller;

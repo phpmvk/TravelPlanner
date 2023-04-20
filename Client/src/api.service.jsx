@@ -29,14 +29,36 @@ const postJourney = async(journey)=>{
         headers:{
             "Content-type":"application/json"
         }
-    })
+    }
+    )
     console.log(response);
     const journeys = await response.json()
     console.log(journeys);
-    return trips 
+    return journeys 
     } catch (error) {
         console.log(error);
     }
 }
 
-export { postTrip, postJourney }
+
+const postActivity = async(activity)=>{
+    try {
+        console.log("posting");
+        const response = await fetch(url+"activity",{
+        method:"POST",
+        body:JSON.stringify(activity),
+        headers:{
+            "Content-type":"application/json"
+        }
+    }
+    )
+    console.log(response);
+    const activitys = await response.json()
+    console.log(activitys);
+    return activitys 
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export { postTrip, postJourney, postActivity }

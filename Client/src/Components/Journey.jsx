@@ -1,19 +1,20 @@
 import { Link } from 'react-router-dom';
 import { postJourney } from "../api.service";
+import { parseISO } from 'date-fns'
 
 
 function Journey() {
 
     const handleSubmit = async function(e){
-        // setError("")
         e.preventDefault()
         
-        const budget = parseFloat(e.target[4].value);
-        const price = parseInt(e.target[5].value);
+        const start = parseISO(e.target[0].value)
+        const end = parseISO(e.target[1].value)
+        const price = parseFloat(e.target[4].value);
                
         const newJourney = {
-            start: e.target[0].value,
-            end: e.target[1].value,
+            start: start,
+            end: end,
             depCity: e.target[2].value,
             arrCity: e.target[3].value,
             price: price,
@@ -41,17 +42,11 @@ function Journey() {
             <input className="inputs" placeholder="Price"></input>
                 <h4>TransportType</h4>
             <input className="inputs" placeholder="Duration"></input>
-                {/* <h4>DATE</h4>
-            <input className="inputs" type="datetime-local" min={new Date().toISOString().slice(0, 16)}></input> */}
-            {/* {error && <p className="error">{error}</p>} */}
             <button className="button" type="submit">Create</button>
-            </form>
-
-
-
+        </form>
 
        <Link to="/post">
-            <button className="button">Back to post trip</button>
+            <button className="button">Cancel journey</button>
         </Link>
       </div>
     )
