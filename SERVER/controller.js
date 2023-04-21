@@ -17,6 +17,40 @@ controller.getAllTrips = async (req, res) => {
   }
 };
 
+controller.getSearchTrips = async (req, res) => {
+  try {
+    const a = req.query;
+
+    const searchItemsArr = a.activities;
+    console.log(searchItemsArr);
+
+    const getTrips = await prisma.trip.findMany({
+      where: {
+        activities: {
+          some: {
+            activityType: {
+              in: searchItemsArr,
+            },
+          },
+        },
+      },
+    });
+
+    // dependiendo de los otros filtros, modificaremos esta array
+    console.log("gettrips", getTrips);
+
+    //   const trips = await prisma.trip.findMany({ include: { activities: true } });
+    // const trips = await prisma.trip.findMany({});
+    // const response = res.json(trips);
+    // const rep = "ok";
+    res.json(getTrips);
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
 controller.getTripById = async (req, res) => {
   console.log("function getTripById called");
   const { id } = req.params;

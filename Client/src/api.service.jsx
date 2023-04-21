@@ -80,10 +80,12 @@ export const getAllTrips = async () => {
   }
 };
 
-export const getSearchedTrips = async () => {
+export const getSearchedTrips = async (url2) => {
   try {
-    const response = await fetch(url + "result");
-    const res = response.json();
+    const response = await fetch(url2);
+    const res = await response.json();
+    console.log(res);
+    // const res = response.json();
     return res;
   } catch (error) {
     console.log(error);

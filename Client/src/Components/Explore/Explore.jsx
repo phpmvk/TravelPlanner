@@ -1,19 +1,21 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { parseISO } from 'date-fns'
 
+import {getSearchedTrips} from "../../api.service"
 
-function Explore() {
+import './Explore.css'
+
+function Explore({setsearchedTrips}) {
 
     const navigate = useNavigate();
 
+    
     const handleSubmit = async function(e){
         e.preventDefault()
-        
+
         const start = parseISO(e.target[0].value)
         const end = parseISO(e.target[1].value)
         const budget = parseFloat(e.target[3].value);
-        const activities = e.target[4].value.split(",")
-        console.log(activities);
 
                
         const newTrip = {
@@ -21,12 +23,32 @@ function Explore() {
             end: end,
             depCity: e.target[2].value,
             budget: budget,
-            activities: activities
+            activities: e.target[4].value.split(",")
         }
 
-        console.log("newTrip", newTrip);
-    
-        // const journeyNew = await postJourney(newJourney);
+        // const arr = e.target[4].value.split(",")
+
+        // console.log("Prop activities",newTrip.activities);
+
+        const constructSearchUrl = function () {
+            const arrRes = ["http://localhost:3001/result/?"]
+            newTrip.activities.forEach((activity, index) => {
+                if (index===0) {
+                    arrRes.push("activities=")
+                } else{
+                    arrRes.push("&activities=")
+                }
+                arrRes.push(activity)
+            });
+            return arrRes.join("")
+        }
+
+        const url = constructSearchUrl()
+
+        console.log("result of search", url);
+
+        const resultOfSearch = await getSearchedTrips(url)
+        setsearchedTrips(resultOfSearch)
         
         e.target.reset()
 

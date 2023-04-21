@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react'
-import { getTrip } from '../api.service'
+import { getTrip } from '../../api.service'
 
 
 // console.log(params);

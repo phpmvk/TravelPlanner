@@ -1,8 +1,9 @@
-import { postTrip } from "../api.service";
+import { postTrip } from "../../api.service";
 import { Link, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
-import { TripContext } from '../App';
+import { TripContext } from '../../App';
 
+import './Post.css'
 
 function Post() {
     const { currentTrip, setcurrentTrip } = useContext(TripContext);
