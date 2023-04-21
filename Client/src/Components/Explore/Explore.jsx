@@ -26,9 +26,26 @@ function Explore({setsearchedTrips}) {
             activities: e.target[4].value.split(",")
         }
 
+        function diffMinutes(date1, date2) {
+            if (date2>date1){
+                const diff = Math.abs(date2 - date1);
+                return Math.floor((diff / (1000 * 60)));
+            }
+            // A FAIRE !
+            // Ajouter une fonction lorsqu'on se situe dans le cas où l'utilisateur a choisit une start date posterieur
+            // à la end date où le formulaire ne pourra pas s'envoyer et un message d'erreur sera retourné disant à
+            // l'utilsateur rentrer une end date supérieure à la start date
+            const diff = Math.abs(date1 - date2);
+            return Math.floor((diff / (1000 * 60)));
+          }
+
+        console.log("diff de minutes",diffMinutes(start, end))
+
         // const arr = e.target[4].value.split(",")
 
         // console.log("Prop activities",newTrip.activities);
+        console.log("startdate", newTrip.start);
+        console.log(newTrip.end);
 
         const constructSearchUrl = function () {
             const arrRes = ["http://localhost:3001/result/?"]
@@ -40,6 +57,9 @@ function Explore({setsearchedTrips}) {
                 }
                 arrRes.push(activity)
             });
+            arrRes.push("&budget=")
+            arrRes.push(newTrip.budget)
+
             return arrRes.join("")
         }
 

@@ -22,7 +22,10 @@ controller.getSearchTrips = async (req, res) => {
     const a = req.query;
 
     const searchItemsArr = a.activities;
-    console.log(searchItemsArr);
+    const budget = a.budget;
+
+    console.log("searchItemsArr", searchItemsArr);
+    console.log("budget", a.budget);
 
     const getTrips = await prisma.trip.findMany({
       where: {
@@ -36,14 +39,13 @@ controller.getSearchTrips = async (req, res) => {
       },
     });
 
+    const results = getTrips.filter((trip) => trip.budget <= budget);
+    // const res2 = results.filter((trip) => trip.budget <= budget);
     // dependiendo de los otros filtros, modificaremos esta array
+    // console.log("res2", res2);
     console.log("gettrips", getTrips);
 
-    //   const trips = await prisma.trip.findMany({ include: { activities: true } });
-    // const trips = await prisma.trip.findMany({});
-    // const response = res.json(trips);
-    // const rep = "ok";
-    res.json(getTrips);
+    res.json(results);
     res.status(200);
   } catch (error) {
     console.log(error);
