@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createContext,useState } from 'react'
 import { BrowserRouter, Routes, Route , useParams} from 'react-router-dom';
 
 import Home from './Components/Home'
@@ -11,19 +11,26 @@ import Trip from './Components/Trip'
 
 import './App.css'
 
+export const TripContext = createContext();
+
 function App() {
+
+  const [res, setRes] = useState([]);
+
   return (
 
     <BrowserRouter>
-      <Routes>
-        <Route exact path="/" element={<Home />} />
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/post" element={<Post />} />
-        <Route path="/journey" element={<Journey />} />
-        <Route path="/activity" element={<Activity />} />
-        <Route path="/result" element={<Result />} />
-        <Route path="/trip/:idTrip" element={<Trip />} />
-      </Routes>
+      <TripContext.Provider value={{ res, setRes }}>
+        <Routes>
+          <Route exact path="/" element={<Home />} />
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/post" element={<Post />} />
+          <Route path="/result" element={<Result />} />
+          <Route path="/journey" element={<Journey />} />
+          <Route path="/activity" element={<Activity />} />
+          <Route path="/trip/:idTrip" element={<Trip />} />
+        </Routes>
+      </TripContext.Provider>
     </BrowserRouter>
   );
 }

@@ -11,17 +11,15 @@ datasource db {
 }
 
 model Trip {
-  id       Int       @id @default(autoincrement())
+  id       Int        @id @default(autoincrement())
   name     String
   user     String
   depCity  String
   arrCity  String
   budget   Float
   duration Int
-  // activities String[]
   journeys Journey[]
-
-  // activities Activity[]
+  Activity Activity[]
 }
 
 model Journey {
@@ -33,7 +31,7 @@ model Journey {
   price         Float
   transportType String
   trip          Trip     @relation(fields: [idTrip], references: [id])
-  idTrip        Int //Sera la primary key del trip
+  idTrip        Int //Es la primary key del trip
 }
 
 model Activity {
@@ -45,4 +43,6 @@ model Activity {
   price          Float
   activityType   String
   additionalInfo String?
+  trip           Trip     @relation(fields: [idTrip], references: [id])
+  idTrip         Int
 }

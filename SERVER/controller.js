@@ -18,7 +18,7 @@ controller.getAllTrips = async (req, res) => {
 };
 
 controller.getTripById = async (req, res) => {
-  console.log("function called");
+  console.log("function getTripById called");
   const { id } = req.params;
   try {
     const trips = await prisma.trip.findUnique({
@@ -69,6 +69,7 @@ controller.createJourney = async (req, res) => {
         arrCity: req.body.arrCity,
         price: req.body.price,
         transportType: req.body.transportType,
+        trip: { connect: { id: req.body.idTrip } },
       },
     });
     res.json(journey);

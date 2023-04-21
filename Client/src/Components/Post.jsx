@@ -1,9 +1,11 @@
 import { postTrip } from "../api.service";
 import { Link, useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import { TripContext } from '../App';
 
 
 function Post() {
-  
+    const { res, setRes } = useContext(TripContext);
     // const [error, setError] = useState('');
 
     const navigate = useNavigate();
@@ -34,6 +36,7 @@ function Post() {
     const res = await postTrip(newTrip)
 
     if (res.id) {
+        setRes(res)
         navigate(`/trip/${res.id}`)
     }
     
@@ -56,9 +59,6 @@ function Post() {
             <input className="inputs" placeholder="Budget"></input>
                 <h4>Duration</h4>
             <input className="inputs" placeholder="Duration"></input>
-                {/* <h4>DATE</h4>
-            <input className="inputs" type="datetime-local" min={new Date().toISOString().slice(0, 16)}></input> */}
-            {/* {error && <p className="error">{error}</p>} */}
             <button className="button" type="submit">Create</button>
             </form>
 
