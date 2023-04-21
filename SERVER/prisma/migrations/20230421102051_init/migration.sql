@@ -20,6 +20,7 @@ CREATE TABLE "Journey" (
     "arrCity" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "transportType" TEXT NOT NULL,
+    "idTrip" INTEGER NOT NULL,
 
     CONSTRAINT "Journey_pkey" PRIMARY KEY ("id")
 );
@@ -34,6 +35,13 @@ CREATE TABLE "Activity" (
     "price" DOUBLE PRECISION NOT NULL,
     "activityType" TEXT NOT NULL,
     "additionalInfo" TEXT,
+    "idTrip" INTEGER NOT NULL,
 
     CONSTRAINT "Activity_pkey" PRIMARY KEY ("id")
 );
+
+-- AddForeignKey
+ALTER TABLE "Journey" ADD CONSTRAINT "Journey_idTrip_fkey" FOREIGN KEY ("idTrip") REFERENCES "Trip"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Activity" ADD CONSTRAINT "Activity_idTrip_fkey" FOREIGN KEY ("idTrip") REFERENCES "Trip"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

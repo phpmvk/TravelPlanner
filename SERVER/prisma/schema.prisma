@@ -11,15 +11,15 @@ datasource db {
 }
 
 model Trip {
-  id       Int        @id @default(autoincrement())
-  name     String
-  user     String
-  depCity  String
-  arrCity  String
-  budget   Float
-  duration Int
-  journeys Journey[]
-  Activity Activity[]
+  id         Int        @id @default(autoincrement())
+  name       String
+  user       String
+  depCity    String
+  arrCity    String
+  budget     Float
+  duration   Int
+  journeys   Journey[]
+  activities Activity[]
 }
 
 model Journey {
