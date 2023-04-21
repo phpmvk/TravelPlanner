@@ -44,12 +44,7 @@ controller.createTrip = async (req, res) => {
         arrCity: req.body.arrCity,
         budget: req.body.budget,
         duration: req.body.duration,
-
-        // activities: {
-        //   create: req.body.activities,
-        // },
       },
-      //   include: { activities: true },
     });
     res.json(trip);
     res.status(200);
@@ -91,6 +86,7 @@ controller.createActivity = async (req, res) => {
         price: req.body.price,
         activityType: req.body.activityType,
         additionalInfo: req.body.additionalInfo,
+        trip: { connect: { id: req.body.idTrip } },
       },
     });
     res.json(activity);
