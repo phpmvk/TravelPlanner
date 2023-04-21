@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { parseISO } from 'date-fns'
 import { useContext } from 'react';
 
@@ -7,12 +7,12 @@ import { TripContext } from '../App';
 
 
 function Journey() {
-    const { res } = useContext(TripContext);
+    const { currentTrip } = useContext(TripContext);
 
     const navigate = useNavigate();
 
     function handleCancelJourney() {
-        navigate(`/trip/${res.id}`);
+        navigate(`/trip/${currentTrip.id}`);
       }
 
     const handleSubmit = async function(e){
@@ -29,8 +29,7 @@ function Journey() {
             arrCity: e.target[3].value,
             price: price,
             transportType: e.target[5].value,
-            // trip: res,
-            idTrip: res.id
+            idTrip: currentTrip.id
         }
 
         console.log("newjourney", newJourney);
@@ -39,12 +38,12 @@ function Journey() {
         
         e.target.reset()
 
-        navigate(`/trip/${res.id}`)
+        navigate(`/trip/${currentTrip.id}`)
     }
   
     return (
       <div className="Journey">
-        <h1>{res.name}</h1>
+        <h1>{currentTrip.name}</h1>
        <form onSubmit={handleSubmit}>
                 <h2>Create a new Journey</h2>
                 <h4>Start of the trip</h4>

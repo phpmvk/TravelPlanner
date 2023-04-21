@@ -5,7 +5,7 @@ import { TripContext } from '../App';
 
 
 function Post() {
-    const { res, setRes } = useContext(TripContext);
+    const { currentTrip, setcurrentTrip } = useContext(TripContext);
     // const [error, setError] = useState('');
 
     const navigate = useNavigate();
@@ -33,11 +33,11 @@ function Post() {
     }
 
     // Send to back-End
-    const res = await postTrip(newTrip)
+    const currentTrip = await postTrip(newTrip)
 
-    if (res.id) {
-        setRes(res)
-        navigate(`/trip/${res.id}`)
+    if (currentTrip.id) {
+        setcurrentTrip(currentTrip)
+        navigate(`/trip/${currentTrip.id}`)
     }
     
     e.target.reset()

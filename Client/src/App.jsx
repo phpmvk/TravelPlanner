@@ -15,12 +15,12 @@ export const TripContext = createContext();
 
 function App() {
 
-  const [res, setRes] = useState([]);
+  const [currentTrip, setcurrentTrip] = useState([]);
 
   return (
 
     <BrowserRouter>
-      <TripContext.Provider value={{ res, setRes }}>
+      <TripContext.Provider value={{ currentTrip, setcurrentTrip }}>
         <Routes>
           <Route exact path="/" element={<Home />} />
           <Route path="/explore" element={<Explore />} />
