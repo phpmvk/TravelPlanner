@@ -3,6 +3,10 @@ const prisma = new PrismaClient();
 
 const controller = {};
 
+function lowerCase(string) {
+  return string.toLowerCase();
+}
+
 controller.getAllTrips = async (req, res) => {
   try {
     console.log("I am inside the getallTrips");
@@ -20,9 +24,13 @@ controller.getAllTrips = async (req, res) => {
 controller.getSearchTrips = async (req, res) => {
   try {
     const a = req.query;
+    if (typeof a.activities === "string") {
+      a.activities = a.activities.split(" ");
+    }
 
-    const searchItemsArr = a.activities;
-    const budget = a.budget;
+    const searchItemsArr = a.activities.map(lowerCase);
+    const budget = lowerCase(a.budget);
+    const depCity = lowerCase(a.depCity);
 
     console.log("searchItemsArr", searchItemsArr);
     console.log("budget", a.budget);
@@ -39,10 +47,10 @@ controller.getSearchTrips = async (req, res) => {
       },
     });
 
-    const results = getTrips.filter((trip) => trip.budget <= budget);
-    // const res2 = results.filter((trip) => trip.budget <= budget);
-    // dependiendo de los otros filtros, modificaremos esta array
-    // console.log("res2", res2);
+    const results = getTrips
+      .filter((trip) => trip.budget <= budget)
+      .filter((trip) => trip.depCity === depCity);
+
     console.log("gettrips", getTrips);
 
     res.json(results);
@@ -76,8 +84,8 @@ controller.createTrip = async (req, res) => {
       data: {
         name: req.body.name,
         user: req.body.user,
-        depCity: req.body.depCity,
-        arrCity: req.body.arrCity,
+        depCity: lowerCase(req.body.depCity),
+        arrCity: lowerCase(req.body.arrCity),
         budget: req.body.budget,
         duration: req.body.duration,
       },
@@ -96,10 +104,10 @@ controller.createJourney = async (req, res) => {
       data: {
         start: req.body.start,
         end: req.body.end,
-        depCity: req.body.depCity,
-        arrCity: req.body.arrCity,
+        depCity: lowerCase(req.body.depCity),
+        arrCity: lowerCase(req.body.arrCity),
         price: req.body.price,
-        transportType: req.body.transportType,
+        transportType: lowerCase(req.body.transportType),
         trip: { connect: { id: req.body.idTrip } },
       },
     });
@@ -117,15 +125,33 @@ controller.createActivity = async (req, res) => {
       data: {
         start: req.body.start,
         end: req.body.end,
-        depCity: req.body.depCity,
-        arrCity: req.body.arrCity,
+        depCity: lowerCase(req.body.depCity),
+        arrCity: lowerCase(req.body.arrCity),
         price: req.body.price,
-        activityType: req.body.activityType,
-        additionalInfo: req.body.additionalInfo,
+        activityType: lowerCase(req.body.activityType),
+        additionalInfo: lowerCase(req.body.additionalInfo),
         trip: { connect: { id: req.body.idTrip } },
       },
     });
     res.json(activity);
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
+controller.getTripByUser = async (req, res) => {
+  console.log("function getTripByUser called");
+  const { user } = req.query;
+  try {
+    const trips = await prisma.trip.findMany({
+      where: {
+        user: user,
+      },
+    });
+    res.json(trips);
+    console.log(trips);
     res.status(200);
   } catch (error) {
     console.log(error);

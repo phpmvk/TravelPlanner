@@ -92,4 +92,24 @@ export const getSearchedTrips = async (url2) => {
   }
 };
 
+export const getTripsByUser = async (url3) => {
+  try {
+    const response = await fetch(url3);
+    const res = await response.json();
+    // console.log(res);
+    // const res = response.json();
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+// export const getActivitiesByTripId = async (id) => {
+//   const activities = await prisma.activity.findMany({
+//     where: { idTrip: id },
+//     // orderBy: { start: 'asc' },
+//   })
+//   return activities
+// }
+
 // export { postTrip, postJourney, postActivity, getTrip, getAllTrips }

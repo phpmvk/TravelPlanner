@@ -1,0 +1,8 @@
+.trip-card {
+    border: 1px solid gray;
+    padding: 10px;
+    margin-bottom: 10px;
+    background-image: linear-gradient(180deg, #f7f7f7 0%, #ffeee3 100%);
+    border-radius: 10px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  }

@@ -8,6 +8,7 @@ import Activity from './Components/Activity/Activity'
 import Journey from './Components/Journey/Journey'
 import Result from './Components/Result/Result'
 import Trip from './Components/Trip/Trip'
+import Modify from './Components/Modifiy/Modify';
 
 import './App.css'
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/journey" element={<Journey />} />
           <Route path="/activity" element={<Activity />} />
           <Route path="/trip/:idTrip" element={<Trip />} />
+          <Route path="/modify" element={<Modify />} />
         </Routes>
       </TripContext.Provider>
     </BrowserRouter>

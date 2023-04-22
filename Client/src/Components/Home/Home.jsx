@@ -20,6 +20,10 @@ function Home() {
        <button className='button'>Post</button>
        </Link>
 
+       <Link to="/modify">
+       <button className='button'>Modify Trip</button>
+       </Link>
+
       </div>
 
    
