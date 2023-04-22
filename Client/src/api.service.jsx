@@ -106,7 +106,7 @@ export const getTripsByUser = async (url3) => {
 
 export const deleteJourney = async (journeyId) => {
   try {
-    const response = await fetch(`${url}modify?id=${journeyId}`, {
+    const response = await fetch(`${url}modify?idjourney=${journeyId}`, {
       method: "DELETE",
       headers: {
         "Content-type": "application/json",
@@ -116,6 +116,24 @@ export const deleteJourney = async (journeyId) => {
     const journeys = await response.json();
     console.log(journeys);
     return journeys;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteActivity = async (activityId) => {
+  try {
+    console.log("Hello")
+    const response = await fetch(`${url}modify?idactivity=${activityId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    // console.log(response);
+    const activities = await response.json();
+    console.log(activities);
+    return activities;
   } catch (error) {
     console.log(error);
   }

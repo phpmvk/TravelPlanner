@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Modify.css";
-import { getTripsByUser, deleteJourney } from "../../api.service";
+import { getTripsByUser, deleteJourney,deleteActivity } from "../../api.service";
 import { useState } from "react";
 import moment from "moment";
 
@@ -23,12 +23,42 @@ function Modify() {
   const handleDeleteJourney = async (journeyId) => {
     try {
       const deletedJourney = await deleteJourney(journeyId);
-      console.log("Journey deleted:", deletedJourney);
-      // Mettre à jour votre état pour refléter les changements
+    //   console.log("Journey deleted:", deletedJourney);
+  
+      setTrips(prevState => prevState.map(trip => {
+        const updatedJourneys = trip.journeys.filter(journey => journey.id !== journeyId);
+        // const updatedActivities = trip.activities.filter(activity => activity.id !== journeyId);
+        return {
+          ...trip,
+          journeys: updatedJourneys,
+          activities: trip.activities,
+        };
+      }));
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleDeleteActivity = async (activityId) => {
+    console.log("delete an activity")
+    try {
+      const deletedActivity = await deleteActivity(activityId);
+      console.log("Journey deleted:", deletedActivity);
+  
+      setTrips(prevState => prevState.map(trip => {
+        // const updatedJourneys = trip.journeys.filter(journey => journey.id !== activityId);
+        const updatedActivities = trip.activities.filter(activity => activity.id !== activityId);
+        return {
+          ...trip,
+          journeys: trip.journeys,
+          activities: updatedActivities,
+        };
+      }));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
 
   const handleSubmit = async function (e) {
     e.preventDefault();
@@ -109,6 +139,7 @@ function Modify() {
                       {item.additionalInfo && (
                         <p>Additional Info: {item.additionalInfo}</p>
                       )}
+                      <button onClick={() => handleDeleteActivity(item.id)}>Delete Activity</button>
                     </li>
                   </div>
                 )}

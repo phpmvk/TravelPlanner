@@ -164,20 +164,39 @@ controller.getTripByUser = async (req, res) => {
   }
 };
 
-controller.deleteJourney = async (req, res) => {
-  const { id } = req.query;
-  console.log("id received", id);
-  try {
-    const deletedJourney = await prisma.journey.delete({
-      where: {
-        id: parseInt(id),
-      },
-    });
-    res.json(deletedJourney);
-    res.status(200);
-  } catch (error) {
-    console.log(error);
-    res.status(400);
+controller.deleteItem = async (req, res) => {
+  if (req.query.idjourney) {
+    const id = req.query.idjourney;
+    console.log(req.query);
+    console.log("id received", id);
+    try {
+      const deletedJourney = await prisma.journey.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
+      res.json(deletedJourney);
+      res.status(200);
+    } catch (error) {
+      console.log(error);
+      res.status(400);
+    }
+  } else if (req.query.idactivity) {
+    const id = req.query.idactivity;
+    console.log(req.query);
+    console.log("id received", id);
+    try {
+      const deletedActivity = await prisma.activity.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
+      res.json(deletedActivity);
+      res.status(200);
+    } catch (error) {
+      console.log(error);
+      res.status(400);
+    }
   }
 };
 
