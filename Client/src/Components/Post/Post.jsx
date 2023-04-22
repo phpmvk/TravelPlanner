@@ -12,18 +12,11 @@ function Post() {
     const navigate = useNavigate();
 
     const handleSubmit = async function(e){
-    // setError("")
     e.preventDefault()
     
     const budget = parseFloat(e.target[4].value);
     const duration = parseInt(e.target[5].value);
-    
-    // if (!title || !date || !venue) {
-    //   setError('Please fill in all fields.');
-    //   return;
-    // }
-    
-    
+
     const newTrip = {
         name: e.target[0].value,
         user: e.target[1].value,

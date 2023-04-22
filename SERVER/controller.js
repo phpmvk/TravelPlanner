@@ -12,8 +12,9 @@ controller.getAllTrips = async (req, res) => {
     console.log("I am inside the getallTrips");
     //   const trips = await prisma.trip.findMany({ include: { activities: true } });
     const trips = await prisma.trip.findMany({});
-    const response = res.json(trips);
-    res.send(response);
+    // const response = res.json(trips);
+    res.json(trips);
+    // res.send(response);
     res.status(200);
   } catch (error) {
     console.log(error);
@@ -149,9 +150,30 @@ controller.getTripByUser = async (req, res) => {
       where: {
         user: user,
       },
+      include: {
+        journeys: true,
+        activities: true,
+      },
     });
     res.json(trips);
     console.log(trips);
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
+controller.deleteJourney = async (req, res) => {
+  const { id } = req.query;
+  console.log("id received", id);
+  try {
+    const deletedJourney = await prisma.journey.delete({
+      where: {
+        id: parseInt(id),
+      },
+    });
+    res.json(deletedJourney);
     res.status(200);
   } catch (error) {
     console.log(error);

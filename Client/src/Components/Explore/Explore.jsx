@@ -24,11 +24,6 @@ function Explore({ setsearchedTrips }) {
       activities: e.target[4].value.split(","),
     };
 
-    // if (!newTrip.depCity || !newTrip.budget || !newTrip.activities) {
-    //   setError("Please fill in all fields.");
-    //   return;
-    // }
-
     function diffMinutes(date1, date2) {
       if (date2 > date1) {
         const diff = Math.abs(date2 - date1);

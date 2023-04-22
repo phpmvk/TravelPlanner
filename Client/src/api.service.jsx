@@ -104,6 +104,23 @@ export const getTripsByUser = async (url3) => {
   }
 };
 
+export const deleteJourney = async (journeyId) => {
+  try {
+    const response = await fetch(`${url}modify?id=${journeyId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    // console.log(response);
+    const journeys = await response.json();
+    console.log(journeys);
+    return journeys;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 // export const getActivitiesByTripId = async (id) => {
 //   const activities = await prisma.activity.findMany({
 //     where: { idTrip: id },
