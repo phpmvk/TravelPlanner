@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import "./Modify.css";
-import { getTripsByUser, deleteJourney,deleteActivity } from "../../api.service";
+import { getTripsByUser, deleteJourney,deleteActivity, deleteTrip  } from "../../api.service";
 import { useState } from "react";
 import moment from "moment";
 
@@ -58,6 +58,25 @@ function Modify() {
       console.log(error);
     }
   };
+
+  const handleDeleteTrip = async (tripId) => {
+    try {
+      // Delete all activities associated to the trip
+      const deletedActivities = await Promise.all(trips.find(trip => trip.id === tripId).activities.map(activity => deleteActivity(activity.id)));
+  
+      // Delete all journeys associated to the trip
+      const deletedJourneys = await Promise.all(trips.find(trip => trip.id === tripId).journeys.map(journey => deleteJourney(journey.id)));
+  
+      // Delete the trip
+      const deletedTrip = await deleteTrip(tripId);
+  
+      // Updates the displayed trip list
+      setTrips(prevState => prevState.filter(trip => trip.id !== tripId));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   
 
   const handleSubmit = async function (e) {
@@ -103,6 +122,7 @@ function Modify() {
           <p>Arrival City: {putCapLet(trip.arrCity)}</p>
           <p>Budget: {trip.budget}</p>
           <p>Duration: {trip.duration} days</p>
+          <button onClick={() => handleDeleteTrip(trip.id)}>Delete Trip</button>
 
           {trip.journeys
             .concat(trip.activities)

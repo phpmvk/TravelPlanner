@@ -7,7 +7,6 @@ export const postTrip = async (trip) => {
     // console.log("posting a Trip");
     const response = await fetch(url + "post", {
       method: "POST",
-      // body:trip,
       body: JSON.stringify(trip),
       headers: {
         "Content-type": "application/json",
@@ -85,7 +84,6 @@ export const getSearchedTrips = async (url2) => {
     const response = await fetch(url2);
     const res = await response.json();
     console.log(res);
-    // const res = response.json();
     return res;
   } catch (error) {
     console.log(error);
@@ -97,7 +95,6 @@ export const getTripsByUser = async (url3) => {
     const response = await fetch(url3);
     const res = await response.json();
     // console.log(res);
-    // const res = response.json();
     return res;
   } catch (error) {
     console.log(error);
@@ -106,6 +103,7 @@ export const getTripsByUser = async (url3) => {
 
 export const deleteJourney = async (journeyId) => {
   try {
+    console.log("deleting a journey")
     const response = await fetch(`${url}modify?idjourney=${journeyId}`, {
       method: "DELETE",
       headers: {
@@ -123,7 +121,7 @@ export const deleteJourney = async (journeyId) => {
 
 export const deleteActivity = async (activityId) => {
   try {
-    console.log("Hello")
+    console.log("deleting an activity")
     const response = await fetch(`${url}modify?idactivity=${activityId}`, {
       method: "DELETE",
       headers: {
@@ -134,6 +132,24 @@ export const deleteActivity = async (activityId) => {
     const activities = await response.json();
     console.log(activities);
     return activities;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteTrip = async (tripId) => {
+  try {
+    console.log("deleting a trip")
+    const response = await fetch(`${url}modify?idtrip=${tripId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+      },
+    });
+    // console.log(response);
+    const trip = await response.json();
+    console.log(trip);
+    return trip;
   } catch (error) {
     console.log(error);
   }

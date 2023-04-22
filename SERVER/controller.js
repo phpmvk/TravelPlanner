@@ -197,6 +197,22 @@ controller.deleteItem = async (req, res) => {
       console.log(error);
       res.status(400);
     }
+  } else if (req.query.idtrip) {
+    const id = req.query.idtrip;
+    console.log(req.query);
+    console.log("id received", id);
+    try {
+      const deletedTrip = await prisma.trip.delete({
+        where: {
+          id: parseInt(id),
+        },
+      });
+      res.json(deletedTrip);
+      res.status(200);
+    } catch (error) {
+      console.log(error);
+      res.status(400);
+    }
   }
 };
 
