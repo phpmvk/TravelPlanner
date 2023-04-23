@@ -5,16 +5,18 @@ import {
   deleteJourney,
   deleteActivity,
   deleteTrip,
-  updateTrip 
+  updateTrip,
+  postJourney
 } from "../../api.service";
 import { useState } from "react";
 import moment from "moment";
+import { parseISO } from 'date-fns'
 
 function Modify() {
   const [trips, setTrips] = useState([]);
   const [trip, setTrip] = useState({});
   const [searchResult, setSearchResult] = useState(null);
-  const [isViewMode, setMode] = useState(true);
+  const [isViewMode, setMode] = useState("viewMode");
 
   const putCapLet = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -101,7 +103,7 @@ function Modify() {
 
   const switchToEditForm = async (trip) => {
     setTrip(trip);
-    setMode(false);
+    setMode("editMode");
   };
 
   const handleSubmit = async function (e) {
@@ -111,31 +113,30 @@ function Modify() {
       user: putCapLet(lowerCase(e.target[0].value)),
     };
 
-    fetchTripsByUser(searchedUser.user)
+    fetchTripsByUser(searchedUser.user);
 
     e.target.reset();
   };
 
   const fetchTripsByUser = async function (user) {
-    
     const constructSearchUrl = function () {
       const arrRes = ["http://localhost:3001/modify?user="];
       arrRes.push(user);
       return arrRes.join("");
     };
-  
+
     const url = constructSearchUrl();
-  
+
     const resultOfSearch = await getTripsByUser(url);
-  
+
     if (resultOfSearch.length === 0) {
       setSearchResult(false);
     } else {
       setSearchResult(true);
     }
-  
+
     setTrips(resultOfSearch);
-  }
+  };
 
   const handleEditTrip = async function (e) {
     console.log(trips);
@@ -143,13 +144,45 @@ function Modify() {
 
     try {
       const updatedTrip = await updateTrip(trip);
-      console.log('Trip updated:', updatedTrip);
-      fetchTripsByUser(updatedTrip.user)
+      console.log("Trip updated:", updatedTrip);
+      fetchTripsByUser(updatedTrip.user);
     } catch (error) {
       console.error(error);
     }
-    setMode(true)
+    setMode("viewMode");
   };
+
+  const switchToAddJourney = async function (trip) {
+    setTrip(trip);
+    setMode("addJourneyMode");
+  };
+
+  const handleAddJourney = async function(e){
+    console.log("adding a journey");
+    e.preventDefault()
+        
+    const start = parseISO(e.target[0].value)
+    const end = parseISO(e.target[1].value)
+    const price = parseFloat(e.target[4].value);
+           
+    const newJourney = {
+        start: start,
+        end: end,
+        depCity: e.target[2].value,
+        arrCity: e.target[3].value,
+        price: price,
+        transportType: e.target[5].value,
+        idTrip: trip.id
+    }
+
+    console.log("newjourney", newJourney);
+
+    const journeyNew = await postJourney(newJourney);
+
+    fetchTripsByUser(trip.user)
+    
+    setMode("viewMode")
+  }
 
   const renderTrips = () => {
     if (searchResult === false) {
@@ -168,6 +201,7 @@ function Modify() {
           <p>Duration: {trip.duration} days</p>
           <button onClick={() => handleDeleteTrip(trip.id)}>Delete Trip</button>
           <button onClick={() => switchToEditForm(trip)}>Edit Trip</button>
+          <button onClick={() => switchToAddJourney(trip)}>Add Journey</button>
 
           {trip.journeys
             .concat(trip.activities)
@@ -223,8 +257,6 @@ function Modify() {
 
     console.log("trips", trips);
 
-
-
     return (
       <div>
         <form onSubmit={handleEditTrip}>
@@ -273,9 +305,37 @@ function Modify() {
     );
   };
 
+  const renderAddJourney = () =>{
+    return (
+      <div className="Journey">
+        <h1>{trip.name}</h1>
+       <form onSubmit={handleAddJourney}>
+                <h2>Create a new Journey</h2>
+                <h4>Start of the trip</h4>
+            <input className="inputs" type="datetime-local" ></input>
+                <h4>End of the trip</h4>
+            <input className="inputs" type="datetime-local" ></input>
+                <h4>Departure City</h4>
+            <input className="inputs" placeholder="City"></input>
+                <h4>Arrival City</h4>
+            <input className="inputs" placeholder="City"></input>
+                <h4>Price</h4>
+            <input className="inputs" placeholder="Price"></input>
+                <h4>TransportType</h4>
+            <input className="inputs" placeholder="Duration"></input>
+                <button className="button" type="submit">Create</button>
+        </form>
+
+        {/* <button className="button" onClick={handleCancelJourney}>
+            Cancel journey
+        </button> */}
+      </div>
+    )
+  }
+
   return (
     <div>
-      {isViewMode ? (
+      {isViewMode === "viewMode" ? (
         <div>
           <form onSubmit={handleSubmit}>
             <h4>UserName</h4>
@@ -286,9 +346,13 @@ function Modify() {
           </form>
           {renderTrips()}
         </div>
-      ) : (
+      ) : isViewMode === "editMode" ? (
         renderEdit()
-      )}
+      ) : isViewMode === "addJourneyMode" ? (
+        renderAddJourney()
+      ) : isViewMode === "addActivityMode" ? (
+        renderAddActivity()
+      ) : null}
 
       <Link to="/">
         <button className="button">Back to Home</button>
