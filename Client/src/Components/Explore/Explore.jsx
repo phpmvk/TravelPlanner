@@ -9,6 +9,14 @@ function Explore({ setsearchedTrips }) {
 
   const navigate = useNavigate();
 
+  const putCapLet = function (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  function lowerCase(string) {
+    return string.toLowerCase();
+  }
+
   const handleSubmit = async function (e) {
     e.preventDefault();
 
@@ -19,9 +27,9 @@ function Explore({ setsearchedTrips }) {
     const newTrip = {
       start: start,
       end: end,
-      depCity: e.target[2].value,
+      depCity: putCapLet(lowerCase(e.target[2].value)),
       budget: budget,
-      activities: e.target[4].value.split(","),
+      activities: e.target[4].value.split(",").map(lowerCase).map(putCapLet),
     };
 
     function diffMinutes(date1, date2) {
@@ -37,13 +45,13 @@ function Explore({ setsearchedTrips }) {
       return Math.floor(diff / (1000 * 60));
     }
 
-    console.log("diff de minutes", diffMinutes(start, end));
+    // console.log("diff de minutes", diffMinutes(start, end));
 
     // const arr = e.target[4].value.split(",")
 
-    // console.log("Prop activities",newTrip.activities);
-    console.log("startdate", newTrip.start);
-    console.log(newTrip.end);
+    console.log("Prop activities",newTrip.activities);
+    console.log("depCity", newTrip.depCity);
+    // console.log(newTrip.end);
 
     const constructSearchUrl = function () {
       const arrRes = ["http://localhost:3001/result/?"];

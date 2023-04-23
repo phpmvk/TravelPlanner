@@ -7,6 +7,10 @@ function lowerCase(string) {
   return string.toLowerCase();
 }
 
+const putCapLet = function (string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 controller.getAllTrips = async (req, res) => {
   try {
     console.log("I am inside the getallTrips");
@@ -29,12 +33,12 @@ controller.getSearchTrips = async (req, res) => {
       a.activities = a.activities.split(" ");
     }
 
-    const searchItemsArr = a.activities.map(lowerCase);
-    const budget = lowerCase(a.budget);
-    const depCity = lowerCase(a.depCity);
+    const searchItemsArr = a.activities.map(lowerCase).map(putCapLet);
+    const budgetTrip = a.budget;
+    const depCityTrip = putCapLet(lowerCase(a.depCity));
 
     console.log("searchItemsArr", searchItemsArr);
-    console.log("budget", a.budget);
+    console.log("budgetTrip", budgetTrip);
 
     const getTrips = await prisma.trip.findMany({
       where: {
@@ -49,10 +53,8 @@ controller.getSearchTrips = async (req, res) => {
     });
 
     const results = getTrips
-      .filter((trip) => trip.budget <= budget)
-      .filter((trip) => trip.depCity === depCity);
-
-    console.log("gettrips", getTrips);
+      .filter((trip) => trip.budget <= budgetTrip)
+      .filter((trip) => trip.depCity === depCityTrip);
 
     res.json(results);
     res.status(200);
@@ -85,8 +87,8 @@ controller.createTrip = async (req, res) => {
       data: {
         name: req.body.name,
         user: req.body.user,
-        depCity: lowerCase(req.body.depCity),
-        arrCity: lowerCase(req.body.arrCity),
+        depCity: req.body.depCity,
+        arrCity: req.body.arrCity,
         budget: req.body.budget,
         duration: req.body.duration,
       },
@@ -105,10 +107,10 @@ controller.createJourney = async (req, res) => {
       data: {
         start: req.body.start,
         end: req.body.end,
-        depCity: lowerCase(req.body.depCity),
-        arrCity: lowerCase(req.body.arrCity),
+        depCity: req.body.depCity,
+        arrCity: req.body.arrCity,
         price: req.body.price,
-        transportType: lowerCase(req.body.transportType),
+        transportType: req.body.transportType,
         trip: { connect: { id: req.body.idTrip } },
       },
     });
@@ -126,11 +128,11 @@ controller.createActivity = async (req, res) => {
       data: {
         start: req.body.start,
         end: req.body.end,
-        depCity: lowerCase(req.body.depCity),
-        arrCity: lowerCase(req.body.arrCity),
+        depCity: req.body.depCity,
+        arrCity: req.body.arrCity,
         price: req.body.price,
-        activityType: lowerCase(req.body.activityType),
-        additionalInfo: lowerCase(req.body.additionalInfo),
+        activityType: req.body.activityType,
+        additionalInfo: req.body.additionalInfo,
         trip: { connect: { id: req.body.idTrip } },
       },
     });

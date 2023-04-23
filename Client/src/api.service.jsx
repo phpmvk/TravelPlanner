@@ -83,7 +83,7 @@ export const getSearchedTrips = async (url2) => {
   try {
     const response = await fetch(url2);
     const res = await response.json();
-    console.log(res);
+    console.log(response);
     return res;
   } catch (error) {
     console.log(error);

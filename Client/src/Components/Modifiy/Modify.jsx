@@ -6,11 +6,11 @@ import {
   deleteActivity,
   deleteTrip,
   updateTrip,
-  postJourney
+  postJourney,
 } from "../../api.service";
 import { useState } from "react";
 import moment from "moment";
-import { parseISO } from 'date-fns'
+import { parseISO } from "date-fns";
 
 function Modify() {
   const [trips, setTrips] = useState([]);
@@ -157,32 +157,36 @@ function Modify() {
     setMode("addJourneyMode");
   };
 
-  const handleAddJourney = async function(e){
+  const switchToModifyPage = async function (){
+    setMode("viewMode")
+  }
+
+  const handleAddJourney = async function (e) {
     console.log("adding a journey");
-    e.preventDefault()
-        
-    const start = parseISO(e.target[0].value)
-    const end = parseISO(e.target[1].value)
+    e.preventDefault();
+
+    const start = parseISO(e.target[0].value);
+    const end = parseISO(e.target[1].value);
     const price = parseFloat(e.target[4].value);
-           
+
     const newJourney = {
-        start: start,
-        end: end,
-        depCity: e.target[2].value,
-        arrCity: e.target[3].value,
-        price: price,
-        transportType: e.target[5].value,
-        idTrip: trip.id
-    }
+      start: start,
+      end: end,
+      depCity: e.target[2].value,
+      arrCity: e.target[3].value,
+      price: price,
+      transportType: e.target[5].value,
+      idTrip: trip.id,
+    };
 
     console.log("newjourney", newJourney);
 
     const journeyNew = await postJourney(newJourney);
 
-    fetchTripsByUser(trip.user)
-    
-    setMode("viewMode")
-  }
+    fetchTripsByUser(trip.user);
+
+    setMode("viewMode");
+  };
 
   const renderTrips = () => {
     if (searchResult === false) {
@@ -305,33 +309,37 @@ function Modify() {
     );
   };
 
-  const renderAddJourney = () =>{
+  const renderAddJourney = () => {
     return (
       <div className="Journey">
         <h1>{trip.name}</h1>
-       <form onSubmit={handleAddJourney}>
-                <h2>Create a new Journey</h2>
-                <h4>Start of the trip</h4>
-            <input className="inputs" type="datetime-local" ></input>
-                <h4>End of the trip</h4>
-            <input className="inputs" type="datetime-local" ></input>
-                <h4>Departure City</h4>
-            <input className="inputs" placeholder="City"></input>
-                <h4>Arrival City</h4>
-            <input className="inputs" placeholder="City"></input>
-                <h4>Price</h4>
-            <input className="inputs" placeholder="Price"></input>
-                <h4>TransportType</h4>
-            <input className="inputs" placeholder="Duration"></input>
-                <button className="button" type="submit">Create</button>
+        <form onSubmit={handleAddJourney}>
+          <h2>Create a new Journey</h2>
+          <h4>Start of the trip</h4>
+          <input className="inputs" type="datetime-local"></input>
+          <h4>End of the trip</h4>
+          <input className="inputs" type="datetime-local"></input>
+          <h4>Departure City</h4>
+          <input className="inputs" placeholder="City"></input>
+          <h4>Arrival City</h4>
+          <input className="inputs" placeholder="City"></input>
+          <h4>Price</h4>
+          <input className="inputs" placeholder="Price"></input>
+          <h4>TransportType</h4>
+          <input className="inputs" placeholder="Transport used"></input>
+          <button className="button" type="submit">
+            Create
+          </button>
         </form>
 
-        {/* <button className="button" onClick={handleCancelJourney}>
+        <button className="button" onClick={switchToModifyPage}>
             Cancel journey
-        </button> */}
+        </button>
       </div>
-    )
-  }
+    );
+  };
+
+  const renderAddActivity = () => {};
 
   return (
     <div>
