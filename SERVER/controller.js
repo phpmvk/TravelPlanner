@@ -50,6 +50,10 @@ controller.getSearchTrips = async (req, res) => {
           },
         },
       },
+      include: {
+        journeys: true,
+        activities: true,
+      },
     });
 
     const results = getTrips

@@ -52,7 +52,7 @@ function Activity() {
     <div className="Activity">
       <h1>{currentTrip.name}</h1>
       <form onSubmit={handleSubmit}>
-        <h2>Create a new Acivity</h2>
+        <h2>Create a new Activity</h2>
         <h4>Start of the activity</h4>
         <input className="inputs" type="datetime-local"></input>
         <h4>End of the activity</h4>

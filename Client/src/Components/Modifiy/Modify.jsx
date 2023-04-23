@@ -7,6 +7,7 @@ import {
   deleteTrip,
   updateTrip,
   postJourney,
+  postActivity,
 } from "../../api.service";
 import { useState } from "react";
 import moment from "moment";
@@ -157,9 +158,14 @@ function Modify() {
     setMode("addJourneyMode");
   };
 
-  const switchToModifyPage = async function (){
-    setMode("viewMode")
+  const switchToAddActivity = async function (trip) {
+    setTrip(trip);
+    setMode("addActivityMode");
   }
+
+  const switchToModifyPage = async function () {
+    setMode("viewMode");
+  };
 
   const handleAddJourney = async function (e) {
     console.log("adding a journey");
@@ -188,12 +194,41 @@ function Modify() {
     setMode("viewMode");
   };
 
+  const handleAddActivity= async function (e) {
+
+    console.log("adding an activity");
+    e.preventDefault();
+
+    const start = parseISO(e.target[0].value);
+    const end = parseISO(e.target[1].value);
+    const price = parseFloat(e.target[4].value);
+
+    const newActivity = {
+      start: start,
+      end: end,
+      depCity: putCapLet(lowerCase(e.target[2].value)),
+      arrCity: putCapLet(lowerCase(e.target[3].value)),
+      price: price,
+      activityType: putCapLet(lowerCase(e.target[5].value)),
+      additionalInfo: putCapLet(lowerCase(e.target[6].value)),
+      idTrip: trip.id,
+    };
+
+    const activityNew = await postActivity(newActivity);
+
+    fetchTripsByUser(trip.user);
+
+    setMode("viewMode");
+
+  }
+
   const renderTrips = () => {
     if (searchResult === false) {
       return <h2>No trips found for this user</h2>;
     } else if (trips.length === 0) {
       return null;
     }
+    console.log("trips",trips);
     return trips.map((trip) => {
       return (
         <div className="trip-card" key={trip.id}>
@@ -206,6 +241,7 @@ function Modify() {
           <button onClick={() => handleDeleteTrip(trip.id)}>Delete Trip</button>
           <button onClick={() => switchToEditForm(trip)}>Edit Trip</button>
           <button onClick={() => switchToAddJourney(trip)}>Add Journey</button>
+          <button onClick={() => switchToAddActivity(trip)}>Add Activity</button>
 
           {trip.journeys
             .concat(trip.activities)
@@ -333,13 +369,43 @@ function Modify() {
         </form>
 
         <button className="button" onClick={switchToModifyPage}>
-            Cancel journey
+          Cancel journey
         </button>
       </div>
     );
   };
 
-  const renderAddActivity = () => {};
+  const renderAddActivity = () => {
+    return (
+      <div className="Activity">
+        <h1>{trip.name}</h1>
+        <form onSubmit={handleAddActivity}>
+          <h2>Create a new Activity</h2>
+          <h4>Start of the activity</h4>
+          <input className="inputs" type="datetime-local"></input>
+          <h4>End of the activity</h4>
+          <input className="inputs" type="datetime-local"></input>
+          <h4>Departure City</h4>
+          <input className="inputs" placeholder="City"></input>
+          <h4>Arrival City</h4>
+          <input className="inputs" placeholder="City"></input>
+          <h4>Price</h4>
+          <input className="inputs" placeholder="Price"></input>
+          <h4>Activity name</h4>
+          <input className="inputs" placeholder="Name of the activity"></input>
+          <h4>Additional Info?</h4>
+          <input className="inputs" placeholder="..."></input>
+          <button className="button" type="submit">
+            Create
+          </button>
+        </form>
+
+        <button className="button" onClick={switchToModifyPage}>
+          Cancel activity
+        </button>
+      </div>
+    );
+  };
 
   return (
     <div>

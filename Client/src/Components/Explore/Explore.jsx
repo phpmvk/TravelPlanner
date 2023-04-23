@@ -76,6 +76,7 @@ function Explore({ setsearchedTrips }) {
     console.log("result of search", url);
 
       const resultOfSearch = await getSearchedTrips(url);
+      console.log("ici a voir", resultOfSearch);
       setsearchedTrips(resultOfSearch);
       e.target.reset();
       navigate("/result");
@@ -87,15 +88,14 @@ function Explore({ setsearchedTrips }) {
       <h1>Explore</h1>
       <form onSubmit={handleSubmit}>
         <h4>Start of the Trip</h4>
-        <input className="inputs" type="datetime-local"></input>
+        <input className="inputs" type="datetime-local" required></input>
         <h4>End of the activity</h4>
-        <input className="inputs" type="datetime-local"></input>
+        <input className="inputs" type="datetime-local" required></input>
         <h4>Departure City</h4>
         <input className="inputs" placeholder="City" required></input>
 
         <h4>Budget</h4>
         <input className="inputs" name="budget" placeholder="Price" required></input>
-        {/* <label htmlFor="budget">Mandatory Input</label> */}
         <h4>Activities</h4>
         <input
           className="inputs"
