@@ -216,4 +216,32 @@ controller.deleteItem = async (req, res) => {
   }
 };
 
+controller.modifyTrip = async (req, res) => {
+  console.log("modifyTrip called");
+  console.log(req.query);
+  const id = req.query.idtrip2;
+  console.log(id, "id");
+  const { name, user, depCity, arrCity, budget, duration } = req.body;
+
+  try {
+    const updatedTrip = await prisma.trip.update({
+      where: {
+        id: Number(id),
+      },
+      data: {
+        name,
+        user,
+        depCity,
+        arrCity,
+        budget: parseFloat(budget),
+        duration: parseInt(duration),
+      },
+    });
+    res.json(updatedTrip);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error updating trip" });
+  }
+};
+
 module.exports = controller;

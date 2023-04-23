@@ -94,7 +94,7 @@ export const getTripsByUser = async (url3) => {
   try {
     const response = await fetch(url3);
     const res = await response.json();
-    // console.log(res);
+    console.log(res);
     return res;
   } catch (error) {
     console.log(error);
@@ -154,6 +154,23 @@ export const deleteTrip = async (tripId) => {
     console.log(error);
   }
 };
+
+export const updateTrip = async (trip) => {
+  console.log(trip);
+  const response = await fetch(`${url}modify?idtrip2=${trip.id}`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(trip)
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || 'Error updating trip');
+  }
+  return data;
+};
+
 
 // export const getActivitiesByTripId = async (id) => {
 //   const activities = await prisma.activity.findMany({

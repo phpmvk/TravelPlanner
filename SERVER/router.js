@@ -9,6 +9,6 @@ router.post("/activity", controller.createActivity);
 router.get("/trip/:id", controller.getTripById);
 router.get("/modify", controller.getTripByUser);
 router.delete("/modify", controller.deleteItem);
-// router.delete("/modify", controller.deleteJourney);
+router.put("/modify", controller.modifyTrip);
 
 module.exports = router;

@@ -1,20 +1,28 @@
 import { Link } from "react-router-dom";
 import "./Modify.css";
-import { getTripsByUser, deleteJourney,deleteActivity, deleteTrip  } from "../../api.service";
+import {
+  getTripsByUser,
+  deleteJourney,
+  deleteActivity,
+  deleteTrip,
+  updateTrip 
+} from "../../api.service";
 import { useState } from "react";
 import moment from "moment";
 
 function Modify() {
   const [trips, setTrips] = useState([]);
+  const [trip, setTrip] = useState({});
   const [searchResult, setSearchResult] = useState(null);
+  const [isViewMode, setMode] = useState(true);
 
   const putCapLet = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  const prettyDate = function(date) {
-    return moment(date).format("dddd HH:mm")
-  }
+  const prettyDate = function (date) {
+    return moment(date).format("dddd HH:mm");
+  };
 
   function lowerCase(string) {
     return string.toLowerCase();
@@ -23,37 +31,43 @@ function Modify() {
   const handleDeleteJourney = async (journeyId) => {
     try {
       const deletedJourney = await deleteJourney(journeyId);
-    //   console.log("Journey deleted:", deletedJourney);
-  
-      setTrips(prevState => prevState.map(trip => {
-        const updatedJourneys = trip.journeys.filter(journey => journey.id !== journeyId);
-        // const updatedActivities = trip.activities.filter(activity => activity.id !== journeyId);
-        return {
-          ...trip,
-          journeys: updatedJourneys,
-          activities: trip.activities,
-        };
-      }));
+      //   console.log("Journey deleted:", deletedJourney);
+
+      setTrips((prevState) =>
+        prevState.map((trip) => {
+          const updatedJourneys = trip.journeys.filter(
+            (journey) => journey.id !== journeyId
+          );
+          return {
+            ...trip,
+            journeys: updatedJourneys,
+            activities: trip.activities,
+          };
+        })
+      );
     } catch (error) {
       console.log(error);
     }
   };
 
   const handleDeleteActivity = async (activityId) => {
-    console.log("delete an activity")
+    console.log("delete an activity");
     try {
       const deletedActivity = await deleteActivity(activityId);
       console.log("Journey deleted:", deletedActivity);
-  
-      setTrips(prevState => prevState.map(trip => {
-        // const updatedJourneys = trip.journeys.filter(journey => journey.id !== activityId);
-        const updatedActivities = trip.activities.filter(activity => activity.id !== activityId);
-        return {
-          ...trip,
-          journeys: trip.journeys,
-          activities: updatedActivities,
-        };
-      }));
+
+      setTrips((prevState) =>
+        prevState.map((trip) => {
+          const updatedActivities = trip.activities.filter(
+            (activity) => activity.id !== activityId
+          );
+          return {
+            ...trip,
+            journeys: trip.journeys,
+            activities: updatedActivities,
+          };
+        })
+      );
     } catch (error) {
       console.log(error);
     }
@@ -62,22 +76,33 @@ function Modify() {
   const handleDeleteTrip = async (tripId) => {
     try {
       // Delete all activities associated to the trip
-      const deletedActivities = await Promise.all(trips.find(trip => trip.id === tripId).activities.map(activity => deleteActivity(activity.id)));
-  
+      const deletedActivities = await Promise.all(
+        trips
+          .find((trip) => trip.id === tripId)
+          .activities.map((activity) => deleteActivity(activity.id))
+      );
+
       // Delete all journeys associated to the trip
-      const deletedJourneys = await Promise.all(trips.find(trip => trip.id === tripId).journeys.map(journey => deleteJourney(journey.id)));
-  
+      const deletedJourneys = await Promise.all(
+        trips
+          .find((trip) => trip.id === tripId)
+          .journeys.map((journey) => deleteJourney(journey.id))
+      );
+
       // Delete the trip
       const deletedTrip = await deleteTrip(tripId);
-  
+
       // Updates the displayed trip list
-      setTrips(prevState => prevState.filter(trip => trip.id !== tripId));
+      setTrips((prevState) => prevState.filter((trip) => trip.id !== tripId));
     } catch (error) {
       console.log(error);
     }
   };
-  
-  
+
+  const switchToEditForm = async (trip) => {
+    setTrip(trip);
+    setMode(false);
+  };
 
   const handleSubmit = async function (e) {
     e.preventDefault();
@@ -86,25 +111,44 @@ function Modify() {
       user: putCapLet(lowerCase(e.target[0].value)),
     };
 
+    fetchTripsByUser(searchedUser.user)
+
+    e.target.reset();
+  };
+
+  const fetchTripsByUser = async function (user) {
+    
     const constructSearchUrl = function () {
       const arrRes = ["http://localhost:3001/modify?user="];
-      arrRes.push(searchedUser.user);
+      arrRes.push(user);
       return arrRes.join("");
     };
-
+  
     const url = constructSearchUrl();
-
+  
     const resultOfSearch = await getTripsByUser(url);
-
+  
     if (resultOfSearch.length === 0) {
       setSearchResult(false);
     } else {
       setSearchResult(true);
     }
-
+  
     setTrips(resultOfSearch);
+  }
 
-    e.target.reset();
+  const handleEditTrip = async function (e) {
+    console.log(trips);
+    e.preventDefault(); // Empêcher le comportement de soumission par défaut
+
+    try {
+      const updatedTrip = await updateTrip(trip);
+      console.log('Trip updated:', updatedTrip);
+      fetchTripsByUser(updatedTrip.user)
+    } catch (error) {
+      console.error(error);
+    }
+    setMode(true)
   };
 
   const renderTrips = () => {
@@ -123,6 +167,7 @@ function Modify() {
           <p>Budget: {trip.budget}</p>
           <p>Duration: {trip.duration} days</p>
           <button onClick={() => handleDeleteTrip(trip.id)}>Delete Trip</button>
+          <button onClick={() => switchToEditForm(trip)}>Edit Trip</button>
 
           {trip.journeys
             .concat(trip.activities)
@@ -133,8 +178,7 @@ function Modify() {
                   <div className="journey-container" key={item.id}>
                     <li>
                       <h3>
-                        {putCapLet(item.transportType)}{" "}
-                        to{" "}
+                        {putCapLet(item.transportType)} to{" "}
                         {putCapLet(item.arrCity)}
                       </h3>
                       <p>Start: {prettyDate(item.start)}</p>
@@ -142,15 +186,15 @@ function Modify() {
                       <p>Departure City: {putCapLet(item.depCity)}</p>
                       <p>Arrival City: {putCapLet(item.arrCity)}</p>
                       <p>Price: {item.price}</p>
-                      <button onClick={() => handleDeleteJourney(item.id)}>Delete Journey</button>
+                      <button onClick={() => handleDeleteJourney(item.id)}>
+                        Delete Journey
+                      </button>
                     </li>
                   </div>
                 ) : (
                   <div className="activity-container" key={item.id}>
                     <li>
-                      <h3>
-                        {putCapLet(item.activityType)}
-                      </h3>
+                      <h3>{putCapLet(item.activityType)}</h3>
                       <p>Start: {prettyDate(item.start)}</p>
                       <p>End: {prettyDate(item.end)}</p>
                       <p>Departure City: {item.depCity}</p>
@@ -159,7 +203,9 @@ function Modify() {
                       {item.additionalInfo && (
                         <p>Additional Info: {item.additionalInfo}</p>
                       )}
-                      <button onClick={() => handleDeleteActivity(item.id)}>Delete Activity</button>
+                      <button onClick={() => handleDeleteActivity(item.id)}>
+                        Delete Activity
+                      </button>
                     </li>
                   </div>
                 )}
@@ -170,17 +216,79 @@ function Modify() {
     });
   };
 
+  const renderEdit = () => {
+    // const { currentTrip, setcurrentTrip } = useContext(TripContext);
+
+    // const navigate = useNavigate();
+
+    console.log("trips", trips);
+
+
+
+    return (
+      <div>
+        <form onSubmit={handleEditTrip}>
+          <h1>Edit your trip</h1>
+          <h4>{trip.name}</h4>
+          <input
+            className="inputs"
+            value={trip.name}
+            onChange={(e) => setTrip({ ...trip, name: e.target.value })}
+          ></input>
+          <h4>User</h4>
+          <input
+            className="inputs"
+            value={trip.user}
+            onChange={(e) => setTrip({ ...trip, user: e.target.value })}
+          ></input>
+          <h4>Departure City</h4>
+          <input
+            className="inputs"
+            value={putCapLet(trip.depCity)}
+            onChange={(e) => setTrip({ ...trip, depCity: e.target.value })}
+          ></input>
+          <h4>Arrival City</h4>
+          <input
+            className="inputs"
+            value={putCapLet(trip.arrCity)}
+            onChange={(e) => setTrip({ ...trip, arrCity: e.target.value })}
+          ></input>
+          <h4>Budget</h4>
+          <input
+            className="inputs"
+            value={trip.budget}
+            onChange={(e) => setTrip({ ...trip, budget: e.target.value })}
+          ></input>
+          <h4>Duration</h4>
+          <input
+            className="inputs"
+            value={trip.duration}
+            onChange={(e) => setTrip({ ...trip, duration: e.target.value })}
+          ></input>
+          <button className="button" type="submit">
+            Edit
+          </button>
+        </form>
+      </div>
+    );
+  };
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <h4>UserName</h4>
-        <input className="inputs" placeholder="Name"></input>
-        <button className="button" type="submit">
-          Search
-        </button>
-      </form>
-
-      {renderTrips()}
+      {isViewMode ? (
+        <div>
+          <form onSubmit={handleSubmit}>
+            <h4>UserName</h4>
+            <input className="inputs" placeholder="Name"></input>
+            <button className="button" type="submit">
+              Search
+            </button>
+          </form>
+          {renderTrips()}
+        </div>
+      ) : (
+        renderEdit()
+      )}
 
       <Link to="/">
         <button className="button">Back to Home</button>
