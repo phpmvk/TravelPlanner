@@ -1,4 +1,8 @@
 import { Link } from "react-router-dom";
+import { useState, React } from "react";
+import moment from "moment";
+import { parseISO } from "date-fns";
+
 import "./Modify.css";
 import {
   getTripsByUser,
@@ -9,9 +13,6 @@ import {
   postJourney,
   postActivity,
 } from "../../api.service";
-import { useState, React } from "react";
-import moment from "moment";
-import { parseISO } from "date-fns";
 
 function Modify() {
   const [trips, setTrips] = useState([]);
@@ -252,8 +253,6 @@ function Modify() {
                   <div className="journey-container" key={item.id}>
                     <li>
                       <h3>
-                        {/* {putCapLet(item.transportType)} to{" "}
-                        {putCapLet(item.arrCity)} */}
                         {item.transportType === "Plane"
                           ? `Flight to ${putCapLet(item.arrCity)}`
                           : item.transportType === "Car"

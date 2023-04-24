@@ -1,4 +1,6 @@
 .buttonRemove {
     background-color: #f0e1cc;
-    border: none;
+    /* border: none; */
+    border-radius: 8px;
+    border-width: 1.5px;
 }

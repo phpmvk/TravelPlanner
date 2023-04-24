@@ -1,7 +1,8 @@
-import { postTrip } from "../../api.service";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext, React } from "react";
+
 import { TripContext } from "../../App";
+import { postTrip } from "../../api.service";
 
 import "./Post.css";
 

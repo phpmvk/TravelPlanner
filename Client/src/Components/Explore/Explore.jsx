@@ -21,7 +21,6 @@ function Explore({ setsearchedTrips }) {
     const activities = Array.from(
       new Set(activitiesList.map((obj) => obj.activityType))
     );
-    console.log("liste des activitées", activities);
     setActivities(activities);
   };
 
@@ -94,10 +93,7 @@ function Explore({ setsearchedTrips }) {
 
     const url = constructSearchUrl();
 
-    console.log("result of search", url);
-
     const resultOfSearch = await getSearchedTrips(url);
-    console.log("ici a voir", resultOfSearch);
     setsearchedTrips(resultOfSearch);
     e.target.reset();
     navigate("/result");
@@ -152,7 +148,7 @@ function Explore({ setsearchedTrips }) {
         <ul>
           {selectedActivities.map((activity, index) => (
             <li key={index}>
-              {putCapLet(lowerCase(activity))}{" "}
+              {"#"}{putCapLet(lowerCase(activity))}{" "}
               <button
               type="button"
               className="buttonRemove"

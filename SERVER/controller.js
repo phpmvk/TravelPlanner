@@ -1,3 +1,5 @@
+/* global require, module */
+
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
@@ -84,6 +86,10 @@ controller.getTripById = async (req, res) => {
     const trips = await prisma.trip.findUnique({
       where: {
         id: parseInt(id),
+      },
+      include: {
+        journeys: true,
+        activities: true,
       },
     });
     res.json(trips);
