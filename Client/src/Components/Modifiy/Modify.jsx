@@ -161,7 +161,7 @@ function Modify() {
   const switchToAddActivity = async function (trip) {
     setTrip(trip);
     setMode("addActivityMode");
-  }
+  };
 
   const switchToModifyPage = async function () {
     setMode("viewMode");
@@ -194,8 +194,7 @@ function Modify() {
     setMode("viewMode");
   };
 
-  const handleAddActivity= async function (e) {
-
+  const handleAddActivity = async function (e) {
     console.log("adding an activity");
     e.preventDefault();
 
@@ -219,8 +218,7 @@ function Modify() {
     fetchTripsByUser(trip.user);
 
     setMode("viewMode");
-
-  }
+  };
 
   const renderTrips = () => {
     if (searchResult === false) {
@@ -228,7 +226,7 @@ function Modify() {
     } else if (trips.length === 0) {
       return null;
     }
-    console.log("trips",trips);
+    console.log("trips", trips);
     return trips.map((trip) => {
       return (
         <div className="trip-card" key={trip.id}>
@@ -241,7 +239,9 @@ function Modify() {
           <button onClick={() => handleDeleteTrip(trip.id)}>Delete Trip</button>
           <button onClick={() => switchToEditForm(trip)}>Edit Trip</button>
           <button onClick={() => switchToAddJourney(trip)}>Add Journey</button>
-          <button onClick={() => switchToAddActivity(trip)}>Add Activity</button>
+          <button onClick={() => switchToAddActivity(trip)}>
+            Add Activity
+          </button>
 
           {trip.journeys
             .concat(trip.activities)
@@ -271,8 +271,16 @@ function Modify() {
                       <h3>{putCapLet(item.activityType)}</h3>
                       <p>Start: {prettyDate(item.start)}</p>
                       <p>End: {prettyDate(item.end)}</p>
-                      <p>Departure City: {item.depCity}</p>
-                      {item.arrCity && <p>Arrival City: {item.arrCity}</p>}
+                      {item.arrCity ? (
+                        <div>
+                          <p>Departure City: {item.depCity}</p>
+                          <p>Arrival City: {item.arrCity}</p>
+                        </div>
+                      ) : (
+                        <div>
+                          <p>Place: {item.depCity}</p>
+                        </div>
+                      )}
                       <p>Price: {item.price}</p>
                       {item.additionalInfo && (
                         <p>Additional Info: {item.additionalInfo}</p>

@@ -76,8 +76,17 @@ function Result({ searchedTrips }) {
                           <h3>{putCapLet(item.activityType)}</h3>
                           <p>Start: {prettyDate(item.start)}</p>
                           <p>End: {prettyDate(item.end)}</p>
-                          <p>Departure City: {item.depCity}</p>
-                          {item.arrCity && <p>Arrival City: {item.arrCity}</p>}
+                          {item.arrCity ? (
+                            <div>
+                              <p>Departure City: {item.depCity}</p>
+                              <p>Arrival City: {item.arrCity}</p>
+                            </div>
+                          ) : (
+                            <div>
+                              <p>Place: {item.depCity}</p>
+                            </div>
+                          )}
+
                           <p>Price: {item.price}</p>
                           {item.additionalInfo && (
                             <p>Additional Info: {item.additionalInfo}</p>
