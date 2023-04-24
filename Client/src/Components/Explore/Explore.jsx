@@ -14,6 +14,20 @@ function Explore({ setsearchedTrips }) {
   const [endDate, setEndDate] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  Explore.propTypes = {
+    setsearchedTrips: PropTypes.func.isRequired,
+  };
+  
+  const navigate = useNavigate();
+
+  const putCapLet = function (string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  function lowerCase(string) {
+    return string.toLowerCase();
+  }
+
   const handleActivitySelect = (e) => {
     const selectedActivity = e.target.value;
     setSelectedActivities([...selectedActivities, selectedActivity]);
@@ -31,19 +45,6 @@ function Explore({ setsearchedTrips }) {
     fetchActivities();
   }, []);
 
-  const navigate = useNavigate();
-
-  Explore.propTypes = {
-    setsearchedTrips: PropTypes.func.isRequired,
-  };
-
-  const putCapLet = function (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
-  function lowerCase(string) {
-    return string.toLowerCase();
-  }
 
   useEffect(() => {
     if (startDate && endDate && startDate > endDate) {
@@ -88,6 +89,9 @@ function Explore({ setsearchedTrips }) {
       return Math.floor(diff / (1000 * 60));
     }
 
+    const duration = diffMinutes(newTrip.end, newTrip.start)
+    console.log(duration);
+
     const constructSearchUrl = function () {
       const arrRes = ["http://localhost:3001/result/?"];
       newTrip.activities.forEach((activity, index) => {
@@ -102,6 +106,9 @@ function Explore({ setsearchedTrips }) {
       arrRes.push(newTrip.budget);
       arrRes.push("&depCity=");
       arrRes.push(newTrip.depCity);
+      arrRes.push("&duration=");
+      arrRes.push(duration);
+
 
       return arrRes.join("");
     };

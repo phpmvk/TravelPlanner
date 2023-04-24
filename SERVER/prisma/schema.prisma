@@ -17,7 +17,9 @@ model Trip {
   depCity    String
   arrCity    String
   budget     Float
-  duration   Int
+  duration   Int?
+  start      DateTime?
+  end        DateTime?
   journeys   Journey[]
   activities Activity[]
 }

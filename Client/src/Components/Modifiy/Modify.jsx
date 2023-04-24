@@ -176,10 +176,10 @@ function Modify() {
     const newJourney = {
       start: start,
       end: end,
-      depCity: e.target[2].value,
-      arrCity: e.target[3].value,
+      depCity: putCapLet(lowerCase(e.target[2].value)),
+      arrCity: putCapLet(lowerCase(e.target[3].value)),
       price: price,
-      transportType: e.target[5].value,
+      transportType: putCapLet(lowerCase(e.target[5].value)),
       idTrip: trip.id,
     };
 

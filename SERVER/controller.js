@@ -67,6 +67,8 @@ controller.getSearchTrips = async (req, res) => {
       },
     });
 
+    console.log(getTrips);
+
     const results = getTrips
       .filter((trip) => trip.budget <= budgetTrip)
       .filter((trip) => trip.depCity === depCityTrip);
@@ -238,10 +240,7 @@ controller.deleteItem = async (req, res) => {
 };
 
 controller.modifyTrip = async (req, res) => {
-  console.log("modifyTrip called");
-  console.log(req.query);
   const id = req.query.idtrip2;
-  console.log(id, "id");
   const { name, user, depCity, arrCity, budget, duration } = req.body;
 
   try {
