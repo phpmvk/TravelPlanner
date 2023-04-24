@@ -57,10 +57,10 @@ function Trip() {
   const handleDeleteTrip = async (tripId) => {
     try {
       const deletedActivities = await Promise.all(
-        trip.activities.map((activity) => deleteActivity(activity.id))
+        trip.activities.map((activity) => deleteActivity(activity))
       );
       const deletedJourneys = await Promise.all(
-        trip.journeys.map((journey) => deleteJourney(journey.id))
+        trip.journeys.map((journey) => deleteJourney(journey))
       );
       const deletedTrip = await deleteTrip(tripId);
       navigate(`/post`);
@@ -94,7 +94,7 @@ function Trip() {
           <p>Budget: {trip.budget}</p>
           <p>Duration: {trip.duration} days</p>
           <button onClick={() => handleDeleteTrip(trip.id)}>
-            Delete Journey
+            Delete Trip
           </button>
 
           {trip.journeys
@@ -119,7 +119,7 @@ function Trip() {
                       <p>Departure City: {putCapLet(item.depCity)}</p>
                       <p>Arrival City: {putCapLet(item.arrCity)}</p>
                       <p>Price: {item.price}</p>
-                      <button onClick={() => handleDeleteJourney(item.id)}>
+                      <button onClick={() => handleDeleteJourney(item)}>
                         Delete Journey
                       </button>
                     </li>
@@ -144,7 +144,7 @@ function Trip() {
                       {item.additionalInfo && (
                         <p>Additional Info: {item.additionalInfo}</p>
                       )}
-                      <button onClick={() => handleDeleteActivity(item.id)}>
+                      <button onClick={() => handleDeleteActivity(item)}>
                         Delete Activity
                       </button>
                     </li>

@@ -32,14 +32,14 @@ function Modify() {
     return string.toLowerCase();
   }
 
-  const handleDeleteJourney = async (journeyId) => {
+  const handleDeleteJourney = async (journ) => {
     try {
-      const deletedJourney = await deleteJourney(journeyId);
+      const deletedJourney = await deleteJourney(journ);
 
       setTrips((prevState) =>
         prevState.map((trip) => {
           const updatedJourneys = trip.journeys.filter(
-            (journey) => journey.id !== journeyId
+            (journey) => journey.id !== journ.id
           );
           return {
             ...trip,
@@ -53,14 +53,14 @@ function Modify() {
     }
   };
 
-  const handleDeleteActivity = async (activityId) => {
+  const handleDeleteActivity = async (activ) => {
     try {
-      const deletedActivity = await deleteActivity(activityId);
+      const deletedActivity = await deleteActivity(activ);
 
       setTrips((prevState) =>
         prevState.map((trip) => {
           const updatedActivities = trip.activities.filter(
-            (activity) => activity.id !== activityId
+            (activity) => activity.id !== activ.id
           );
           return {
             ...trip,
@@ -80,14 +80,14 @@ function Modify() {
       const deletedActivities = await Promise.all(
         trips
           .find((trip) => trip.id === tripId)
-          .activities.map((activity) => deleteActivity(activity.id))
+          .activities.map((activity) => deleteActivity(activity))
       );
 
       // Delete all journeys associated to the trip
       const deletedJourneys = await Promise.all(
         trips
           .find((trip) => trip.id === tripId)
-          .journeys.map((journey) => deleteJourney(journey.id))
+          .journeys.map((journey) => deleteJourney(journey))
       );
 
       // Delete the trip
@@ -263,7 +263,7 @@ function Modify() {
                       <p>Departure City: {putCapLet(item.depCity)}</p>
                       <p>Arrival City: {putCapLet(item.arrCity)}</p>
                       <p>Price: {item.price}</p>
-                      <button onClick={() => handleDeleteJourney(item.id)}>
+                      <button onClick={() => handleDeleteJourney(item)}>
                         Delete Journey
                       </button>
                     </li>
@@ -288,7 +288,7 @@ function Modify() {
                       {item.additionalInfo && (
                         <p>Additional Info: {item.additionalInfo}</p>
                       )}
-                      <button onClick={() => handleDeleteActivity(item.id)}>
+                      <button onClick={() => handleDeleteActivity(item)}>
                         Delete Activity
                       </button>
                     </li>
