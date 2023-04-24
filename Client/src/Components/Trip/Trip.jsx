@@ -28,6 +28,15 @@ function Trip() {
     return string.toLowerCase();
   }
 
+  function formatDuration(minutes) {
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    const roundedHours = hours % 24;
+    const daysString = days > 0 ? `${days} day${days > 1 ? 's' : ''} and ` : '';
+    const hoursString = `${roundedHours} hour${roundedHours > 1 ? 's' : ''}`;
+    return `${daysString}${hoursString}`;
+  }
+
   const fetchTrip = async () => {
     const data = await getTrip(id.idTrip);
     console.log(data);
@@ -92,7 +101,7 @@ function Trip() {
           <p>Departure City: {putCapLet(trip && trip.depCity)}</p>
           <p>Arrival City: {putCapLet(trip && trip.arrCity)}</p>
           <p>Budget: {trip.budget}</p>
-          <p>Duration: {trip.duration} days</p>
+          <p>Duration: {formatDuration(trip.duration)}</p>
           <button onClick={() => handleDeleteTrip(trip.id)}>
             Delete Trip
           </button>

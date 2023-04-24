@@ -210,9 +210,7 @@ export const postActivity = async (activity) => {
     }
 
     if (!trip[0].end || new Date(activity.end) > new Date(trip[0].end)) {
-      console.log("mais en fait c'est cette condition qui est validée");
       trip[0].end = activity.end;
-      console.log("trip après affectation", trip);
     }
 
     trip[0].duration = Number(
@@ -220,7 +218,6 @@ export const postActivity = async (activity) => {
     );
     updateTrip(trip[0]);
 
-    console.log("posting");
     const response = await fetch(url + "activity", {
       method: "POST",
       body: JSON.stringify(activity),
@@ -228,9 +225,7 @@ export const postActivity = async (activity) => {
         "Content-type": "application/json",
       },
     });
-    console.log(response);
     const activitys = await response.json();
-    console.log(activitys);
     return activitys;
   } catch (error) {
     console.log(error);
