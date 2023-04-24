@@ -64,8 +64,8 @@ function Post() {
         <input className="inputs" placeholder="City"></input>
         <h4>Budget</h4>
         <input className="inputs" placeholder="Budget"></input>
-        {/* <h4>Duration</h4>
-        <input className="inputs" placeholder="Duration"></input> */}
+        <h4>Duration</h4>
+        <input className="inputs" placeholder="Duration"></input>
         <button className="button" type="submit">
           Create
         </button>

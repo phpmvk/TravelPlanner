@@ -167,23 +167,45 @@ controller.createActivity = async (req, res) => {
 
 controller.getTripByUser = async (req, res) => {
   console.log("function getTripByUser called");
-  const { user } = req.query;
-  try {
-    const trips = await prisma.trip.findMany({
-      where: {
-        user: user,
-      },
-      include: {
-        journeys: true,
-        activities: true,
-      },
-    });
-    res.json(trips);
-    console.log(trips);
-    res.status(200);
-  } catch (error) {
-    console.log(error);
-    res.status(400);
+  console.log(req.query);
+  if (req.query.user) {
+    try {
+      const user = req.query.user;
+      const trips = await prisma.trip.findMany({
+        where: {
+          user: user,
+        },
+        include: {
+          journeys: true,
+          activities: true,
+        },
+      });
+      res.json(trips);
+      console.log(trips);
+      res.status(200);
+    } catch (error) {
+      console.log(error);
+      res.status(400);
+    }
+  } else if (req.query.idTrip) {
+    try {
+      const idTrip = req.query.idTrip;
+      const trips = await prisma.trip.findMany({
+        where: {
+          id: parseInt(idTrip),
+        },
+        include: {
+          journeys: true,
+          activities: true,
+        },
+      });
+      res.json(trips);
+      console.log(trips);
+      res.status(200);
+    } catch (error) {
+      console.log(error);
+      res.status(400);
+    }
   }
 };
 

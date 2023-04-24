@@ -23,6 +23,11 @@ export const postTrip = async (trip) => {
 
 export const postJourney = async (journey) => {
   try {
+    const trip = await getTripById(journey.idTrip)
+    console.log("trip", trip);
+    console.log("journey", journey);
+
+
     console.log("posting a Journey");
     const response = await fetch(url + "journey", {
       method: "POST",
@@ -31,14 +36,26 @@ export const postJourney = async (journey) => {
         "Content-type": "application/json",
       },
     });
-    console.log(response);
     const journeys = await response.json();
-    console.log(journeys);
+    // console.log(journeys);
     return journeys;
   } catch (error) {
     console.log(error);
   }
 };
+
+export const getTripById = async (idTrip) => {
+  const url4 = `http://localhost:3001/modify?idTrip=${idTrip}`
+  console.log(url4);
+  try {
+    const response = await fetch(url4);
+    const res = await response.json();
+    console.log(res);
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 export const postActivity = async (activity) => {
   try {
