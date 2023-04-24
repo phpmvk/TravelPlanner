@@ -6,7 +6,9 @@ CREATE TABLE "Trip" (
     "depCity" TEXT NOT NULL,
     "arrCity" TEXT NOT NULL,
     "budget" DOUBLE PRECISION NOT NULL,
-    "duration" INTEGER NOT NULL,
+    "duration" INTEGER,
+    "start" TIMESTAMP(3),
+    "end" TIMESTAMP(3),
 
     CONSTRAINT "Trip_pkey" PRIMARY KEY ("id")
 );

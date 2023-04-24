@@ -263,7 +263,9 @@ controller.deleteItem = async (req, res) => {
 
 controller.modifyTrip = async (req, res) => {
   const id = req.query.idtrip2;
-  const { name, user, depCity, arrCity, budget, duration } = req.body;
+  console.log(req.body);
+  const { name, user, depCity, arrCity, budget, duration, start, end } =
+    req.body;
 
   try {
     const updatedTrip = await prisma.trip.update({
@@ -276,7 +278,9 @@ controller.modifyTrip = async (req, res) => {
         depCity,
         arrCity,
         budget: parseFloat(budget),
-        duration: parseInt(duration),
+        duration: Number(duration),
+        start,
+        end,
       },
     });
     res.json(updatedTrip);
