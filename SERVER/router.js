@@ -10,5 +10,6 @@ router.get("/trip/:id", controller.getTripById);
 router.get("/modify", controller.getTripByUser);
 router.delete("/modify", controller.deleteItem);
 router.put("/modify", controller.modifyTrip);
+router.get("/explore", controller.getActivitiesList);
 
 module.exports = router;

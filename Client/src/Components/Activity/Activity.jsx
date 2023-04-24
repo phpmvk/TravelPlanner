@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { parseISO } from "date-fns";
-import { useContext } from "react";
+import { useContext, React } from "react";
 
 import { postActivity } from "../../api.service";
 import { TripContext } from "../../App";

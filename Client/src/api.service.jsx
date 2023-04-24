@@ -171,6 +171,15 @@ export const updateTrip = async (trip) => {
   return data;
 };
 
+export const getActivitiesList = async () => {
+  try {
+    const response = await fetch(url + "explore");
+    const res = response.json();
+    return res;
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 // export const getActivitiesByTripId = async (id) => {
 //   const activities = await prisma.activity.findMany({

@@ -1,13 +1,39 @@
 import { Link, useNavigate } from "react-router-dom";
 import { parseISO } from "date-fns";
+import { useState, React, useEffect } from "react";
+import PropTypes from "prop-types";
 
-import { getSearchedTrips } from "../../api.service";
-
+import { getSearchedTrips, getActivitiesList } from "../../api.service";
 import "./Explore.css";
 
 function Explore({ setsearchedTrips }) {
+  const [activities, setActivities] = useState(null);
+  const [selectedActivities, setSelectedActivities] = useState([]);
+  const [newActivity, setNewActivity] = useState("");
+
+  const handleActivitySelect = (e) => {
+    const selectedActivity = e.target.value;
+    setSelectedActivities([...selectedActivities, selectedActivity]);
+  };
+
+  const fetchActivities = async () => {
+    const activitiesList = await getActivitiesList();
+    const activities = Array.from(
+      new Set(activitiesList.map((obj) => obj.activityType))
+    );
+    console.log("liste des activitées", activities);
+    setActivities(activities);
+  };
+
+  useEffect(() => {
+    fetchActivities();
+  }, []);
 
   const navigate = useNavigate();
+
+  Explore.propTypes = {
+    setsearchedTrips: PropTypes.func.isRequired,
+  };
 
   const putCapLet = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -29,7 +55,10 @@ function Explore({ setsearchedTrips }) {
       end: end,
       depCity: putCapLet(lowerCase(e.target[2].value)),
       budget: budget,
-      activities: e.target[4].value.split(",").map(lowerCase).map(putCapLet),
+      activities: [
+        ...selectedActivities,
+        ...e.target[4].value.split(",").map(lowerCase).map(putCapLet),
+      ],
     };
 
     function diffMinutes(date1, date2) {
@@ -44,14 +73,6 @@ function Explore({ setsearchedTrips }) {
       const diff = Math.abs(date1 - date2);
       return Math.floor(diff / (1000 * 60));
     }
-
-    // console.log("diff de minutes", diffMinutes(start, end));
-
-    // const arr = e.target[4].value.split(",")
-
-    console.log("Prop activities",newTrip.activities);
-    console.log("depCity", newTrip.depCity);
-    // console.log(newTrip.end);
 
     const constructSearchUrl = function () {
       const arrRes = ["http://localhost:3001/result/?"];
@@ -75,12 +96,11 @@ function Explore({ setsearchedTrips }) {
 
     console.log("result of search", url);
 
-      const resultOfSearch = await getSearchedTrips(url);
-      console.log("ici a voir", resultOfSearch);
-      setsearchedTrips(resultOfSearch);
-      e.target.reset();
-      navigate("/result");
-
+    const resultOfSearch = await getSearchedTrips(url);
+    console.log("ici a voir", resultOfSearch);
+    setsearchedTrips(resultOfSearch);
+    e.target.reset();
+    navigate("/result");
   };
 
   return (
@@ -95,12 +115,59 @@ function Explore({ setsearchedTrips }) {
         <input className="inputs" placeholder="City" required></input>
 
         <h4>Budget</h4>
-        <input className="inputs" name="budget" placeholder="Price" required></input>
+        <input
+          className="inputs"
+          name="budget"
+          placeholder="Price"
+          required
+        ></input>
         <h4>Activities</h4>
         <input
           className="inputs"
-          placeholder="Name the activities you would like to do" required
+          placeholder="Name the activities you would like to do"
+          value={newActivity}
+          onChange={(e) => setNewActivity(e.target.value)}
         ></input>
+
+        <button
+          className="button"
+          type="button"
+          onClick={() => {
+            setSelectedActivities([...selectedActivities, newActivity]);
+            setNewActivity("");
+          }}
+        >
+          Add activity
+        </button>
+
+        <select className="inputs" onChange={handleActivitySelect}>
+          <option value="">Select activities</option>
+          {activities &&
+            activities.map((activity, index) => (
+              <option key={index} value={activity}>
+                {activity}
+              </option>
+            ))}
+        </select>
+        <ul>
+          {selectedActivities.map((activity, index) => (
+            <li key={index}>
+              {putCapLet(lowerCase(activity))}{" "}
+              <button
+              type="button"
+              className="buttonRemove"
+                onClick={() =>
+                  setSelectedActivities(
+                    selectedActivities.filter((a) => a !== activity)
+                  )
+                }
+              >
+                X
+              </button>
+            </li>
+          ))}
+        </ul>
+
         <button className="button">Search</button>
       </form>
 
@@ -110,6 +177,5 @@ function Explore({ setsearchedTrips }) {
     </div>
   );
 }
-
 
 export default Explore;

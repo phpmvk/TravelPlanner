@@ -13,12 +13,21 @@ const putCapLet = function (string) {
 
 controller.getAllTrips = async (req, res) => {
   try {
-    console.log("I am inside the getallTrips");
-    //   const trips = await prisma.trip.findMany({ include: { activities: true } });
+    console.log("Calling getallTrips");
     const trips = await prisma.trip.findMany({});
-    // const response = res.json(trips);
     res.json(trips);
-    // res.send(response);
+    res.status(200);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+  }
+};
+
+controller.getActivitiesList = async (req, res) => {
+  try {
+    console.log("Calling getActivitiesList");
+    const trips = await prisma.activity.findMany({});
+    res.json(trips);
     res.status(200);
   } catch (error) {
     console.log(error);

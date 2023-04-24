@@ -1,12 +1,17 @@
 import moment from "moment";
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, React } from "react";
+import PropTypes from "prop-types";
 
 import "./Result.css";
 
 function Result({ searchedTrips }) {
   const [showDetails, setShowDetails] = useState(false);
   const [selectedTripId, setSelectedTripId] = useState(null);
+
+  Result.propTypes = {
+    searchedTrips: PropTypes.array.isRequired,
+  };
 
   const putCapLet = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -55,13 +60,18 @@ function Result({ searchedTrips }) {
                 .concat(trip.activities)
                 .sort((a, b) => new Date(a.start) - new Date(b.start))
                 .map((item) => (
-                  <div>
+                  <div key={item.id}>
                     {item.transportType ? (
                       <div className="journey-container" key={item.id}>
                         <li>
                           <h3>
-                            {putCapLet(item.transportType)} to{" "}
-                            {putCapLet(item.arrCity)}
+                            {item.transportType === "Plane"
+                              ? `Flight to ${putCapLet(item.arrCity)}`
+                              : item.transportType === "Car"
+                              ? `Drive to ${putCapLet(item.arrCity)}`
+                              : `${putCapLet(
+                                  item.transportType
+                                )} to ${putCapLet(item.arrCity)}`}
                           </h3>
                           <p>Start: {prettyDate(item.start)}</p>
                           <p>End: {prettyDate(item.end)}</p>
