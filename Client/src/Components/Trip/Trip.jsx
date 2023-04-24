@@ -1,14 +1,20 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, React } from "react";
 import moment from "moment";
 import { parseISO } from "date-fns";
 
-import { getTrip } from "../../api.service";
+import {
+  getTrip,
+  deleteJourney,
+  deleteActivity,
+  deleteTrip,
+} from "../../api.service";
 
 function Trip() {
   const id = useParams();
   console.log(id.idTrip);
   const [trip, setTrip] = useState(null);
+  const navigate = useNavigate();
 
   const putCapLet = function (string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -22,19 +28,53 @@ function Trip() {
     return string.toLowerCase();
   }
 
+  const fetchTrip = async () => {
+    const data = await getTrip(id.idTrip);
+    console.log(data);
+    setTrip(data);
+  };
+
+  const handleDeleteActivity = async (activityId) => {
+    try {
+      const deletedActivity = await deleteActivity(activityId);
+      // console.log("Journey deleted:", deletedActivity);
+      fetchTrip();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteJourney = async (journeyId) => {
+    try {
+      const deletedJourney = await deleteJourney(journeyId);
+      //   console.log("Journey deleted:", deletedJourney);
+      fetchTrip();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleDeleteTrip = async (tripId) => {
+    try {
+      const deletedActivities = await Promise.all(
+        trip.activities.map((activity) => deleteActivity(activity.id))
+      );
+      const deletedJourneys = await Promise.all(
+        trip.journeys.map((journey) => deleteJourney(journey.id))
+      );
+      const deletedTrip = await deleteTrip(tripId);
+      navigate(`/post`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchTrip = async () => {
-      const data = await getTrip(id.idTrip);
-      console.log(data);
-      setTrip(data);
-    };
     fetchTrip();
   }, []);
 
-  console.log("trip", trip);
   return (
     <div className="Trip">
-
       <Link to="/activity">
         <button className="button">Post an Activity</button>
       </Link>
@@ -53,6 +93,9 @@ function Trip() {
           <p>Arrival City: {putCapLet(trip && trip.arrCity)}</p>
           <p>Budget: {trip.budget}</p>
           <p>Duration: {trip.duration} days</p>
+          <button onClick={() => handleDeleteTrip(trip.id)}>
+            Delete Journey
+          </button>
 
           {trip.journeys
             .concat(trip.activities)
@@ -76,9 +119,9 @@ function Trip() {
                       <p>Departure City: {putCapLet(item.depCity)}</p>
                       <p>Arrival City: {putCapLet(item.arrCity)}</p>
                       <p>Price: {item.price}</p>
-                      {/* <button onClick={() => handleDeleteJourney(item.id)}>
+                      <button onClick={() => handleDeleteJourney(item.id)}>
                         Delete Journey
-                      </button> */}
+                      </button>
                     </li>
                   </div>
                 ) : (
@@ -101,9 +144,9 @@ function Trip() {
                       {item.additionalInfo && (
                         <p>Additional Info: {item.additionalInfo}</p>
                       )}
-                      {/* <button onClick={() => handleDeleteActivity(item.id)}>
+                      <button onClick={() => handleDeleteActivity(item.id)}>
                         Delete Activity
-                      </button> */}
+                      </button>
                     </li>
                   </div>
                 )}

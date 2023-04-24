@@ -35,7 +35,6 @@ function Modify() {
   const handleDeleteJourney = async (journeyId) => {
     try {
       const deletedJourney = await deleteJourney(journeyId);
-      //   console.log("Journey deleted:", deletedJourney);
 
       setTrips((prevState) =>
         prevState.map((trip) => {
@@ -55,10 +54,8 @@ function Modify() {
   };
 
   const handleDeleteActivity = async (activityId) => {
-    console.log("delete an activity");
     try {
       const deletedActivity = await deleteActivity(activityId);
-      console.log("Journey deleted:", deletedActivity);
 
       setTrips((prevState) =>
         prevState.map((trip) => {
