@@ -10,6 +10,9 @@ function Explore({ setsearchedTrips }) {
   const [activities, setActivities] = useState(null);
   const [selectedActivities, setSelectedActivities] = useState([]);
   const [newActivity, setNewActivity] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleActivitySelect = (e) => {
     const selectedActivity = e.target.value;
@@ -42,6 +45,22 @@ function Explore({ setsearchedTrips }) {
     return string.toLowerCase();
   }
 
+  useEffect(() => {
+    if (startDate && endDate && startDate > endDate) {
+      setErrorMessage("Start date should not be after end date");
+    } else {
+      setErrorMessage("");
+    }
+  }, [startDate, endDate]);
+
+  const handleStartDateChange = (event) => {
+    setStartDate(event.target.value);
+  };
+
+  const handleEndDateChange = (event) => {
+    setEndDate(event.target.value);
+  };
+
   const handleSubmit = async function (e) {
     e.preventDefault();
 
@@ -65,10 +84,6 @@ function Explore({ setsearchedTrips }) {
         const diff = Math.abs(date2 - date1);
         return Math.floor(diff / (1000 * 60));
       }
-      // A FAIRE !
-      // Ajouter une fonction lorsqu'on se situe dans le cas où l'utilisateur a choisit une start date posterieur
-      // à la end date où le formulaire ne pourra pas s'envoyer et un message d'erreur sera retourné disant à
-      // l'utilsateur rentrer une end date supérieure à la start date
       const diff = Math.abs(date1 - date2);
       return Math.floor(diff / (1000 * 60));
     }
@@ -104,9 +119,22 @@ function Explore({ setsearchedTrips }) {
       <h1>Explore</h1>
       <form onSubmit={handleSubmit}>
         <h4>Start of the Trip</h4>
-        <input className="inputs" type="datetime-local" required></input>
-        <h4>End of the activity</h4>
-        <input className="inputs" type="datetime-local" required></input>
+        <input
+          className="inputs"
+          type="datetime-local"
+          required
+          value={startDate}
+          onChange={handleStartDateChange}
+        ></input>
+        <h4>End of the trip</h4>
+        <input
+          className="inputs"
+          type="datetime-local"
+          required
+          value={endDate}
+          onChange={handleEndDateChange}
+        ></input>
+        {errorMessage && <p className="error">{errorMessage}</p>}
         <h4>Departure City</h4>
         <input className="inputs" placeholder="City" required></input>
 
@@ -132,6 +160,7 @@ function Explore({ setsearchedTrips }) {
             setSelectedActivities([...selectedActivities, newActivity]);
             setNewActivity("");
           }}
+          disabled={!newActivity.trim()}
         >
           Add activity
         </button>
@@ -148,10 +177,11 @@ function Explore({ setsearchedTrips }) {
         <ul>
           {selectedActivities.map((activity, index) => (
             <li key={index}>
-              {"#"}{putCapLet(lowerCase(activity))}{" "}
+              {"#"}
+              {putCapLet(lowerCase(activity))}{" "}
               <button
-              type="button"
-              className="buttonRemove"
+                type="button"
+                className="buttonRemove"
                 onClick={() =>
                   setSelectedActivities(
                     selectedActivities.filter((a) => a !== activity)
@@ -164,7 +194,8 @@ function Explore({ setsearchedTrips }) {
           ))}
         </ul>
 
-        <button className="button">Search</button>
+        <button className="button" disabled={errorMessage}>Search</button>
+
       </form>
 
       <Link to="/">
