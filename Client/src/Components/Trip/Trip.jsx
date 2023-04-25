@@ -8,6 +8,7 @@ import {
   deleteJourney,
   deleteActivity,
   deleteTrip,
+  getTripById,
 } from "../../api.service";
 
 function Trip() {
@@ -39,7 +40,7 @@ function Trip() {
 
   const fetchTrip = async () => {
     const data = await getTrip(id.idTrip);
-    console.log(data);
+    const tripactualized = await getTripById(data.id)
     setTrip(data);
   };
 
@@ -98,8 +99,8 @@ function Trip() {
         <>
           <h3>{trip.name}</h3>
           <p>User: {trip.user}</p>
-          <p>Departure City: {putCapLet(trip && trip.depCity)}</p>
-          <p>Arrival City: {putCapLet(trip && trip.arrCity)}</p>
+          <p>Departure City: {putCapLet(trip.depCity)}</p>
+          <p>Arrival City: {putCapLet(trip.arrCity)}</p>
           <p>Budget: {trip.budget}</p>
           <p>Duration: {formatDuration(trip.duration)}</p>
           <button onClick={() => handleDeleteTrip(trip.id)}>

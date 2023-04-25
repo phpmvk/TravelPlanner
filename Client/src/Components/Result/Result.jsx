@@ -29,39 +29,51 @@ function Result({ searchedTrips }) {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
     const roundedHours = hours % 24;
-    const daysString = days > 0 ? `${days} day${days > 1 ? 's' : ''} and ` : '';
-    const hoursString = `${roundedHours} hour${roundedHours > 1 ? 's' : ''}`;
+    const daysString = days > 0 ? `${days} day${days > 1 ? "s" : ""} and ` : "";
+    const hoursString = `${roundedHours} hour${roundedHours > 1 ? "s" : ""}`;
     return `${daysString}${hoursString}`;
   }
 
   return (
-    <div>
+    <div className="Result-container">
+      <h1 className="Title">Results</h1>
+      <div className="butt-section">
+        <Link to="/">
+          <button className="button">Home</button>
+        </Link>
+      </div>
+
       {searchedTrips.map((trip) => {
         console.log("journey", trip.journeys);
         console.log("activities", trip.activities);
         return (
           <div className="trip-card" key={trip.id}>
-            <h3>{trip.name}</h3>
-            <p>User: {trip.user}</p>
-            <p>Departure City: {putCapLet(trip.depCity)}</p>
-            <p>Arrival City: {putCapLet(trip.arrCity)}</p>
-            <p>Budget: {trip.budget}</p>
-            <p>Duration: {formatDuration(trip.duration)}</p>
+            <h1 className="TripName">{trip.name}</h1>
+            <div className="trip-container">
+              <p className="tripP">User: {trip.user}</p>
+              <p className="tripP">Departure City: {putCapLet(trip.depCity)}</p>
+              <p className="tripP">Arrival City: {putCapLet(trip.arrCity)}</p>
+              <p className="tripP">Budget: {trip.budget}</p>
+              <p className="tripP">Duration: {formatDuration(trip.duration)}</p>
+            </div>
 
-            <button
-              onClick={() => {
-                if (selectedTripId !== trip.id) {
-                  setSelectedTripId(trip.id);
-                  setShowDetails(true);
-                } else {
-                  setShowDetails(!showDetails);
-                }
-              }}
-            >
-              {selectedTripId === trip.id && showDetails
-                ? "Hide Details"
-                : "Show Details"}
-            </button>
+            <div className="butt-section">
+              <button
+                className="button"
+                onClick={() => {
+                  if (selectedTripId !== trip.id) {
+                    setSelectedTripId(trip.id);
+                    setShowDetails(true);
+                  } else {
+                    setShowDetails(!showDetails);
+                  }
+                }}
+              >
+                {selectedTripId === trip.id && showDetails
+                  ? "Hide Details"
+                  : "Show Details"}
+              </button>
+            </div>
 
             {selectedTripId === trip.id &&
               showDetails &&
@@ -82,31 +94,31 @@ function Result({ searchedTrips }) {
                                   item.transportType
                                 )} to ${putCapLet(item.arrCity)}`}
                           </h3>
-                          <p>Start: {prettyDate(item.start)}</p>
-                          <p>End: {prettyDate(item.end)}</p>
-                          <p>Departure City: {putCapLet(item.depCity)}</p>
-                          <p>Arrival City: {putCapLet(item.arrCity)}</p>
-                          <p>Price: {item.price}</p>
+                          <p className="journeyP" >Start: {prettyDate(item.start)}</p>
+                          <p className="journeyP" >End: {prettyDate(item.end)}</p>
+                          <p className="journeyP" >Departure City: {putCapLet(item.depCity)}</p>
+                          <p className="journeyP" >Arrival City: {putCapLet(item.arrCity)}</p>
+                          <p className="journeyP" >Price: {item.price}</p>
                         </li>
                       </div>
                     ) : (
                       <div className="activity-container" key={item.id}>
                         <li>
                           <h3>{putCapLet(item.activityType)}</h3>
-                          <p>Start: {prettyDate(item.start)}</p>
-                          <p>End: {prettyDate(item.end)}</p>
+                          <p className="journeyP" >Start: {prettyDate(item.start)}</p>
+                          <p className="journeyP" >End: {prettyDate(item.end)}</p>
                           {item.arrCity ? (
                             <div>
-                              <p>Departure City: {item.depCity}</p>
-                              <p>Arrival City: {item.arrCity}</p>
+                              <p className="journeyP">Departure City: {item.depCity}</p>
+                              <p className="journeyP" >Arrival City: {item.arrCity}</p>
                             </div>
                           ) : (
                             <div>
-                              <p>Place: {item.depCity}</p>
+                              <p className="journeyP" >Place: {item.depCity}</p>
                             </div>
                           )}
 
-                          <p>Price: {item.price}</p>
+                          <p className="journeyP" >Price: {item.price}</p>
                           {item.additionalInfo && (
                             <p>Additional Info: {item.additionalInfo}</p>
                           )}
@@ -118,11 +130,7 @@ function Result({ searchedTrips }) {
           </div>
         );
       })}
-      <div>
-        <Link to="/">
-          <button className="button">Back to Home</button>
-        </Link>
-      </div>
+      <div></div>
     </div>
   );
 }

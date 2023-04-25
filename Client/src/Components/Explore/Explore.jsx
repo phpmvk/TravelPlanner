@@ -121,7 +121,7 @@ function Explore({ setsearchedTrips }) {
 
   return (
     <div className="explore-container">
-      <h1 className="Title">Explore</h1>
+      <h1 className="TitleExplore">Explore</h1>
       <div className="butt-section">
         <Link to="/">
           <button className="button">Home</button>

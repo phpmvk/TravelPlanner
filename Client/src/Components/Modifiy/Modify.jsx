@@ -248,19 +248,40 @@ function Modify() {
     return trips.map((trip) => {
       return (
         <div className="trip-card" key={trip.id}>
-          <h3>{trip.name}</h3>
-          <p>User: {trip.user}</p>
-          <p>Departure City: {putCapLet(trip.depCity)}</p>
-          <p>Arrival City: {putCapLet(trip.arrCity)}</p>
-          <p>Budget: {trip.budget}</p>
-          <p>Duration: {formatDuration(trip.duration)}</p>
-          <button onClick={() => handleDeleteTrip(trip.id)}>Delete Trip</button>
-          <button onClick={() => switchToEditForm(trip)}>Edit Trip</button>
-          <button onClick={() => switchToAddJourney(trip)}>Add Journey</button>
-          <button onClick={() => switchToAddActivity(trip)}>
-            Add Activity
-          </button>
-
+          <h1>{trip.name}</h1>
+          <div className="trip-container">
+          <p className="tripP">User: {trip.user}</p>
+          <p className="tripP">Departure City: {putCapLet(trip.depCity)}</p>
+          <p className="tripP">Arrival City: {putCapLet(trip.arrCity)}</p>
+          <p className="tripP">Budget: {trip.budget}</p>
+          <p className="tripP">Duration: {formatDuration(trip.duration)}</p>
+          </div>
+          <div className="Modify-butt">
+            <button
+              className="Modifybutton"
+              onClick={() => handleDeleteTrip(trip.id)}
+            >
+              Delete Trip
+            </button>
+            <button
+              className="Modifybutton"
+              onClick={() => switchToEditForm(trip)}
+            >
+              Edit Trip
+            </button>
+            <button
+              className="Modifybutton"
+              onClick={() => switchToAddJourney(trip)}
+            >
+              Add Journey
+            </button>
+            <button
+              className="Modifybutton"
+              onClick={() => switchToAddActivity(trip)}
+            >
+              Add Activity
+            </button>
+          </div>
           {trip.journeys
             .concat(trip.activities)
             .sort((a, b) => new Date(a.start) - new Date(b.start))
@@ -278,39 +299,43 @@ function Modify() {
                               item.arrCity
                             )}`}
                       </h3>
-                      <p>Start: {prettyDate(item.start)}</p>
-                      <p>End: {prettyDate(item.end)}</p>
-                      <p>Departure City: {putCapLet(item.depCity)}</p>
-                      <p>Arrival City: {putCapLet(item.arrCity)}</p>
-                      <p>Price: {item.price}</p>
-                      <button onClick={() => handleDeleteJourney(item)}>
+                      <p className="journeyP" >Start: {prettyDate(item.start)}</p>
+                      <p className="journeyP" >End: {prettyDate(item.end)}</p>
+                      <p className="journeyP" >Departure City: {putCapLet(item.depCity)}</p>
+                      <p className="journeyP" >Arrival City: {putCapLet(item.arrCity)}</p>
+                      <p className="journeyP" >Price: {item.price}</p>
+                      <div className="butt-section">
+                      <button className="button" onClick={() => handleDeleteJourney(item)}>
                         Delete Journey
                       </button>
+                      </div>
                     </li>
                   </div>
                 ) : (
                   <div className="activity-container" key={item.id}>
                     <li>
                       <h3>{putCapLet(item.activityType)}</h3>
-                      <p>Start: {prettyDate(item.start)}</p>
-                      <p>End: {prettyDate(item.end)}</p>
+                      <p className="journeyP" >Start: {prettyDate(item.start)}</p>
+                      <p className="journeyP" >End: {prettyDate(item.end)}</p>
                       {item.arrCity ? (
                         <div>
-                          <p>Departure City: {item.depCity}</p>
-                          <p>Arrival City: {item.arrCity}</p>
+                          <p className="journeyP" >Departure City: {item.depCity}</p>
+                          <p className="journeyP" >Arrival City: {item.arrCity}</p>
                         </div>
                       ) : (
                         <div>
-                          <p>Place: {item.depCity}</p>
+                          <p className="journeyP" >Place: {item.depCity}</p>
                         </div>
                       )}
-                      <p>Price: {item.price}</p>
+                      <p className="journeyP" >Price: {item.price}</p>
                       {item.additionalInfo && (
                         <p>Additional Info: {item.additionalInfo}</p>
                       )}
-                      <button onClick={() => handleDeleteActivity(item)}>
+                      <div className="butt-section">
+                      <button className="button" onClick={() => handleDeleteActivity(item)}>
                         Delete Activity
                       </button>
+                      </div>
                     </li>
                   </div>
                 )}
@@ -331,7 +356,7 @@ function Modify() {
     return (
       <div className="Edit">
         <form onSubmit={handleEditTrip}>
-          <div className="form-section">
+          <div className="formModify-section">
             <h1>Edit your trip</h1>
             <h1 className="TripName">{trip.name}</h1>
 
@@ -538,7 +563,7 @@ function Modify() {
   };
 
   return (
-    <div className="Activity-container">
+    <div className="Modify-container">
       <h1 className="Title">Modify a Trip</h1>
 
       <div className="butt-section">
@@ -549,11 +574,15 @@ function Modify() {
       {isViewMode === "viewMode" ? (
         <div>
           <form onSubmit={handleSubmit}>
-            <h5 className="UserSearch">Search a UserName</h5>
-            <input className="inputs" placeholder="Name"></input>
-            <button className="button" type="submit">
-              Search
-            </button>
+            <div className="Search">
+              <h5 className="UserSearch">Search a UserName</h5>
+              <div className="SearchBar">
+                <input className="inputs" placeholder="Name"></input>
+                <button className="button" type="submit">
+                  Search
+                </button>
+              </div>
+            </div>
           </form>
           {renderTrips()}
         </div>
