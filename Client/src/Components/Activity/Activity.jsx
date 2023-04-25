@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { parseISO } from "date-fns";
 import { useContext, React } from "react";
 
@@ -49,32 +49,74 @@ function Activity() {
   };
 
   return (
-    <div className="Activity">
-      <h1>{currentTrip.name}</h1>
-      <form onSubmit={handleSubmit}>
-        <h2>Create a new Activity</h2>
-        <h4>Start of the activity</h4>
-        <input className="inputs" type="datetime-local"></input>
-        <h4>End of the activity</h4>
-        <input className="inputs" type="datetime-local"></input>
-        <h4>Departure City</h4>
-        <input className="inputs" placeholder="City"></input>
-        <h4>Arrival City</h4>
-        <input className="inputs" placeholder="City"></input>
-        <h4>Price</h4>
-        <input className="inputs" placeholder="Price"></input>
-        <h4>Activity name</h4>
-        <input className="inputs" placeholder="Name of the activity"></input>
-        <h4>Additional Info?</h4>
-        <input className="inputs" placeholder="..."></input>
-        <button className="button" type="submit">
-          Create
-        </button>
-      </form>
+    <div className="Activity-container">
+      <h1 className="Title">Create a new Activity</h1>
 
-      <button className="button" onClick={handleCancelActivity}>
-        Cancel activity
-      </button>
+      <div className="butt-section">
+        <Link to="/">
+          <button className="button">Home</button>
+        </Link>
+      </div>
+      <div className="Activity">
+        <form onSubmit={handleSubmit}>
+          <div className="form-section">
+            <h1 className="TripName">{currentTrip.name}</h1>
+
+            <div className="input-group">
+              <label htmlFor="startDate">Start of the activity</label>
+              <input className="inputs" type="datetime-local" required></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="endDate">End of the activity</label>
+              <input className="inputs" type="datetime-local" required></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="departureCity">Departure City</label>
+              <input className="inputs" placeholder="City" required></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="arrivalCity">Arrival City</label>
+              <input className="inputs" placeholder="City" required></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="Price">Price</label>
+              <input className="inputs" placeholder="Price" required></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="ActivityName">Activity Name</label>
+              <input
+                className="inputs"
+                placeholder="Transport used"
+                required
+              ></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="AdditionalInfo">Additional Info?</label>
+              <input className="inputs" placeholder="..."></input>
+            </div>
+
+            <div className="contain-buttons">
+              <div className="activity-button">
+                <button className="button" type="submit">
+                  Create
+                </button>
+              </div>
+
+              <div className="activity-button">
+                <button className="button" onClick={handleCancelActivity}>
+                  Cancel activity
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

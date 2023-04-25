@@ -56,7 +56,6 @@ function Post() {
             <button className="button">Home</button>
           </Link>
         </div>
-        <div className="Explore">
           <form onSubmit={handleSubmit}>
             <div className="form-section">
               <div className="input-group">
@@ -84,7 +83,6 @@ function Post() {
 
               <div className="input-group">
                 <label htmlFor="budget">Budget</label>
-                {/* <h4>Budget</h4> */}
                 <input className="inputs" placeholder="Budget" />
               </div>
               <div className="contain-button">
@@ -96,7 +94,6 @@ function Post() {
           </form>
         </div>
       </div>
-    </div>
   );
 }
 

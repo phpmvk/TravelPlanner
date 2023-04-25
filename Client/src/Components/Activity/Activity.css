@@ -1,0 +1,36 @@
+.Activity-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .Activity {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+  }
+  
+  .TripName {
+    margin-top: 0px;
+    margin-bottom: 15px;
+  }
+  
+  .contain-buttons{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+  }
+  
+  .activity-button{
+      height: 40px;
+      width: 180px;
+      margin: 10px;
+      font-size: 18px;
+      color: white;
+      background-color: #4e86c9;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }

@@ -38,15 +38,19 @@ function Modify() {
     const hours = Math.floor(minutes / 60);
     const days = Math.floor(hours / 24);
     const roundedHours = hours % 24;
-    const daysString = days > 0 ? `${days} day${days > 1 ? 's' : ''} and ` : '';
-    const hoursString = `${roundedHours} hour${roundedHours > 1 ? 's' : ''}`;
+    const daysString = days > 0 ? `${days} day${days > 1 ? "s" : ""} and ` : "";
+    const hoursString = `${roundedHours} hour${roundedHours > 1 ? "s" : ""}`;
     return `${daysString}${hoursString}`;
   }
 
   const handleDeleteJourney = async (journ) => {
     try {
       const deletedJourney = await deleteJourney(journ);
-      const tripactualized = await getTripById(journ.idTrip)
+      const tripactualized = await getTripById(journ.idTrip);
+      const durtrip = diffMinutes(
+        new Date(tripactualized[0].start),
+        new Date(tripactualized[0].end)
+      );
 
       setTrips((prevState) =>
         prevState.map((trip) => {
@@ -57,7 +61,7 @@ function Modify() {
             ...trip,
             journeys: updatedJourneys,
             activities: trip.activities,
-            duration: diffMinutes(new Date(tripactualized[0].start),new Date(tripactualized[0].end))
+            duration: durtrip,
           };
         })
       );
@@ -69,8 +73,11 @@ function Modify() {
   const handleDeleteActivity = async (activ) => {
     try {
       const deletedActivity = await deleteActivity(activ);
-      const tripactualized = await getTripById(activ.idTrip)
-
+      const tripactualized = await getTripById(activ.idTrip);
+      const durtrip = diffMinutes(
+        new Date(tripactualized[0].start),
+        new Date(tripactualized[0].end)
+      );
 
       setTrips((prevState) =>
         prevState.map((trip) => {
@@ -81,7 +88,7 @@ function Modify() {
             ...trip,
             journeys: trip.journeys,
             activities: updatedActivities,
-            duration: diffMinutes(new Date(tripactualized[0].start),new Date(tripactualized[0].end))
+            duration: durtrip,
           };
         })
       );
@@ -98,17 +105,14 @@ function Modify() {
           .find((trip) => trip.id === tripId)
           .activities.map((activity) => deleteActivity(activity))
       );
-
       // Delete all journeys associated to the trip
       const deletedJourneys = await Promise.all(
         trips
           .find((trip) => trip.id === tripId)
           .journeys.map((journey) => deleteJourney(journey))
       );
-
       // Delete the trip
       const deletedTrip = await deleteTrip(tripId);
-
       // Updates the displayed trip list
       setTrips((prevState) => prevState.filter((trip) => trip.id !== tripId));
     } catch (error) {
@@ -325,42 +329,62 @@ function Modify() {
     console.log("trips", trips);
 
     return (
-      <div>
+      <div className="Edit">
         <form onSubmit={handleEditTrip}>
-          <h1>Edit your trip</h1>
-          <h4>{trip.name}</h4>
-          <input
-            className="inputs"
-            value={trip.name}
-            onChange={(e) => setTrip({ ...trip, name: e.target.value })}
-          ></input>
-          <h4>User</h4>
-          <input
-            className="inputs"
-            value={trip.user}
-            onChange={(e) => setTrip({ ...trip, user: e.target.value })}
-          ></input>
-          <h4>Departure City</h4>
-          <input
-            className="inputs"
-            value={putCapLet(trip.depCity)}
-            onChange={(e) => setTrip({ ...trip, depCity: e.target.value })}
-          ></input>
-          <h4>Arrival City</h4>
-          <input
-            className="inputs"
-            value={putCapLet(trip.arrCity)}
-            onChange={(e) => setTrip({ ...trip, arrCity: e.target.value })}
-          ></input>
-          <h4>Budget</h4>
-          <input
-            className="inputs"
-            value={trip.budget}
-            onChange={(e) => setTrip({ ...trip, budget: e.target.value })}
-          ></input>
-          <button className="button" type="submit">
-            Edit
-          </button>
+          <div className="form-section">
+            <h1>Edit your trip</h1>
+            <h1 className="TripName">{trip.name}</h1>
+
+            <div className="input-group">
+              <label htmlFor="name">Name of the Trip</label>
+              <input
+                className="inputs"
+                value={trip.name}
+                onChange={(e) => setTrip({ ...trip, name: e.target.value })}
+              ></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="user">User</label>
+              <input
+                className="inputs"
+                value={trip.user}
+                onChange={(e) => setTrip({ ...trip, user: e.target.value })}
+              ></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="depCity">Departure City</label>
+              <input
+                className="inputs"
+                value={putCapLet(trip.depCity)}
+                onChange={(e) => setTrip({ ...trip, depCity: e.target.value })}
+              ></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="arrCity">Arrival City</label>
+              <input
+                className="inputs"
+                value={putCapLet(trip.arrCity)}
+                onChange={(e) => setTrip({ ...trip, arrCity: e.target.value })}
+              ></input>
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="budget">Budget</label>
+              <input
+                className="inputs"
+                value={trip.budget}
+                onChange={(e) => setTrip({ ...trip, budget: e.target.value })}
+              ></input>
+            </div>
+            <div className="contain-button">
+              <button className="button" type="submit">
+                Edit
+              </button>
+            </div>
+          </div>
         </form>
       </div>
     );
@@ -368,72 +392,164 @@ function Modify() {
 
   const renderAddJourney = () => {
     return (
-      <div className="Journey">
-        <h1>{trip.name}</h1>
-        <form onSubmit={handleAddJourney}>
-          <h2>Create a new Journey</h2>
-          <h4>Start of the trip</h4>
-          <input className="inputs" type="datetime-local"></input>
-          <h4>End of the trip</h4>
-          <input className="inputs" type="datetime-local"></input>
-          <h4>Departure City</h4>
-          <input className="inputs" placeholder="City"></input>
-          <h4>Arrival City</h4>
-          <input className="inputs" placeholder="City"></input>
-          <h4>Price</h4>
-          <input className="inputs" placeholder="Price"></input>
-          <h4>TransportType</h4>
-          <input className="inputs" placeholder="Transport used"></input>
-          <button className="button" type="submit">
-            Create
-          </button>
-        </form>
+      <div className="Journey-container">
+        <h1 className="Title">Create a new Journey</h1>
+        <div className="Journey">
+          <form onSubmit={handleAddJourney}>
+            <div className="form-section">
+              <h1 className="TripName">{trip.name}</h1>
 
-        <button className="button" onClick={switchToModifyPage}>
-          Cancel journey
-        </button>
+              <div className="input-group">
+                <label htmlFor="startDate">Start of the journey</label>
+                <input
+                  className="inputs"
+                  type="datetime-local"
+                  required
+                ></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="endDate">End of the journey</label>
+                <input
+                  className="inputs"
+                  type="datetime-local"
+                  required
+                ></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="departureCity">Departure City</label>
+                <input className="inputs" placeholder="City" required></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="arrivalCity">Arrival City</label>
+                <input className="inputs" placeholder="City" required></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="Price">Price</label>
+                <input className="inputs" placeholder="Price" required></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="TransportType">Transport Type</label>
+                <input
+                  className="inputs"
+                  placeholder="Transport used"
+                  required
+                ></input>
+              </div>
+
+              <div className="contain-buttons">
+                <div className="journey-button">
+                  <button className="button" type="submit">
+                    Create
+                  </button>
+                </div>
+
+                <div className="journey-button">
+                  <button className="button" onClick={switchToModifyPage}>
+                    Cancel journey
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     );
   };
 
   const renderAddActivity = () => {
     return (
-      <div className="Activity">
-        <h1>{trip.name}</h1>
-        <form onSubmit={handleAddActivity}>
-          <h2>Create a new Activity</h2>
-          <h4>Start of the activity</h4>
-          <input className="inputs" type="datetime-local"></input>
-          <h4>End of the activity</h4>
-          <input className="inputs" type="datetime-local"></input>
-          <h4>Departure City</h4>
-          <input className="inputs" placeholder="City"></input>
-          <h4>Arrival City</h4>
-          <input className="inputs" placeholder="City"></input>
-          <h4>Price</h4>
-          <input className="inputs" placeholder="Price"></input>
-          <h4>Activity name</h4>
-          <input className="inputs" placeholder="Name of the activity"></input>
-          <h4>Additional Info?</h4>
-          <input className="inputs" placeholder="..."></input>
-          <button className="button" type="submit">
-            Create
-          </button>
-        </form>
+      <div className="Activity-container">
+        <h1 className="Title">Create a new Activity</h1>
+        <div className="Activity">
+          <form onSubmit={handleAddActivity}>
+            <div className="form-section">
+              <h1 className="TripName">{trip.name}</h1>
 
-        <button className="button" onClick={switchToModifyPage}>
-          Cancel activity
-        </button>
+              <div className="input-group">
+                <label htmlFor="startDate">Start of the activity</label>
+                <input
+                  className="inputs"
+                  type="datetime-local"
+                  required
+                ></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="endDate">End of the activity</label>
+                <input
+                  className="inputs"
+                  type="datetime-local"
+                  required
+                ></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="departureCity">Departure City</label>
+                <input className="inputs" placeholder="City" required></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="arrivalCity">Arrival City</label>
+                <input className="inputs" placeholder="City" required></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="Price">Price</label>
+                <input className="inputs" placeholder="Price" required></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="ActivityName">Activity Name</label>
+                <input
+                  className="inputs"
+                  placeholder="Transport used"
+                  required
+                ></input>
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="AdditionalInfo">Additional Info?</label>
+                <input className="inputs" placeholder="..."></input>
+              </div>
+
+              <div className="contain-buttons">
+                <div className="activity-button">
+                  <button className="button" type="submit">
+                    Create
+                  </button>
+                </div>
+
+                <div className="activity-button">
+                  <button className="button" onClick={switchToModifyPage}>
+                    Cancel activity
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     );
   };
 
   return (
-    <div>
+    <div className="Activity-container">
+      <h1 className="Title">Modify a Trip</h1>
+
+      <div className="butt-section">
+        <Link to="/">
+          <button className="button">Home</button>
+        </Link>
+      </div>
       {isViewMode === "viewMode" ? (
         <div>
           <form onSubmit={handleSubmit}>
-            <h4>UserName</h4>
+            <h5 className="UserSearch">Search a UserName</h5>
             <input className="inputs" placeholder="Name"></input>
             <button className="button" type="submit">
               Search
@@ -448,10 +564,6 @@ function Modify() {
       ) : isViewMode === "addActivityMode" ? (
         renderAddActivity()
       ) : null}
-
-      <Link to="/">
-        <button className="button">Back to Home</button>
-      </Link>
     </div>
   );
 }
