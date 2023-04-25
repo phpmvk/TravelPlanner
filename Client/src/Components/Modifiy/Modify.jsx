@@ -12,6 +12,8 @@ import {
   updateTrip,
   postJourney,
   postActivity,
+  getTripById,
+  diffMinutes,
 } from "../../api.service";
 
 function Modify() {
@@ -44,6 +46,7 @@ function Modify() {
   const handleDeleteJourney = async (journ) => {
     try {
       const deletedJourney = await deleteJourney(journ);
+      const tripactualized = await getTripById(journ.idTrip)
 
       setTrips((prevState) =>
         prevState.map((trip) => {
@@ -54,6 +57,7 @@ function Modify() {
             ...trip,
             journeys: updatedJourneys,
             activities: trip.activities,
+            duration: diffMinutes(new Date(tripactualized[0].start),new Date(tripactualized[0].end))
           };
         })
       );
@@ -65,6 +69,8 @@ function Modify() {
   const handleDeleteActivity = async (activ) => {
     try {
       const deletedActivity = await deleteActivity(activ);
+      const tripactualized = await getTripById(activ.idTrip)
+
 
       setTrips((prevState) =>
         prevState.map((trip) => {
@@ -75,6 +81,7 @@ function Modify() {
             ...trip,
             journeys: trip.journeys,
             activities: updatedActivities,
+            duration: diffMinutes(new Date(tripactualized[0].start),new Date(tripactualized[0].end))
           };
         })
       );

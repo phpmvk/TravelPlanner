@@ -3,7 +3,7 @@ import axios from "axios";
 
 const url = "http://localhost:3001/";
 
-function diffMinutes(date1, date2) {
+export function diffMinutes(date1, date2) {
   if (date2 > date1) {
     const diff = Math.abs(date2 - date1);
     return Math.floor(diff / (1000 * 60));

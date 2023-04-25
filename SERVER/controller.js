@@ -47,9 +47,11 @@ controller.getSearchTrips = async (req, res) => {
     const searchItemsArr = a.activities.map(lowerCase).map(putCapLet);
     const budgetTrip = a.budget;
     const depCityTrip = putCapLet(lowerCase(a.depCity));
+    const durationTrip = a.duration;
 
     console.log("searchItemsArr", searchItemsArr);
     console.log("budgetTrip", budgetTrip);
+    console.log("duation of the trip", durationTrip);
 
     const getTrips = await prisma.trip.findMany({
       where: {
@@ -71,7 +73,8 @@ controller.getSearchTrips = async (req, res) => {
 
     const results = getTrips
       .filter((trip) => trip.budget <= budgetTrip)
-      .filter((trip) => trip.depCity === depCityTrip);
+      .filter((trip) => trip.depCity === depCityTrip)
+      .filter((trip) => trip.duration <= durationTrip);
 
     res.json(results);
     res.status(200);
