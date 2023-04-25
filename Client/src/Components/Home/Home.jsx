@@ -1,37 +1,29 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
+import { Link } from "react-router-dom";
+import React from "react";
 
-import Logo from '../../assets/Logo2.png'
-import './Home.css'
-
+import Logo from "../../assets/Logo2.png";
+import "./Home.css";
 
 function Home() {
-    // const [count, setCount] = useState(0)
-  
-    return (
-      <div className="Home">
-       {/* <h1>Hello</h1> */}
-       <img src={Logo} alt="logo" width="500px" className='imgLog'/>
-       
-      <div className='buttons'>
-       <Link to="/explore">
-       <button className='button'>Explore</button>
-       </Link>
+  return (
+    <div className="Home">
+      <img src={Logo} alt="logo" width="600px" className="imgLog" />
 
-       <Link to="/post">
-       <button className='button'>Post</button>
-       </Link>
+      <div className="buttonshome">
+        <Link to="/explore">
+          <button className="buttonhome">Explore</button>
+        </Link>
 
-       <Link to="/modify">
-       <button className='button'>Modify Trip</button>
-       </Link>
+        <Link to="/post">
+          <button className="buttonhome">Post</button>
+        </Link>
 
+        <Link to="/modify">
+          <button className="buttonhome">Modify Trip</button>
+        </Link>
       </div>
+    </div>
+  );
+}
 
-   
-      </div>
-    )
-  }
-  
-  export default Home
-  
+export default Home;

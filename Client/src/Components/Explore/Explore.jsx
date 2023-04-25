@@ -17,7 +17,7 @@ function Explore({ setsearchedTrips }) {
   Explore.propTypes = {
     setsearchedTrips: PropTypes.func.isRequired,
   };
-  
+
   const navigate = useNavigate();
 
   const putCapLet = function (string) {
@@ -44,7 +44,6 @@ function Explore({ setsearchedTrips }) {
   useEffect(() => {
     fetchActivities();
   }, []);
-
 
   useEffect(() => {
     if (startDate && endDate && startDate > endDate) {
@@ -89,7 +88,7 @@ function Explore({ setsearchedTrips }) {
       return Math.floor(diff / (1000 * 60));
     }
 
-    const duration = diffMinutes(newTrip.end, newTrip.start)
+    const duration = diffMinutes(newTrip.end, newTrip.start);
     console.log(duration);
 
     const constructSearchUrl = function () {
@@ -108,7 +107,6 @@ function Explore({ setsearchedTrips }) {
       arrRes.push(newTrip.depCity);
       arrRes.push("&duration=");
       arrRes.push(duration);
-
 
       return arrRes.join("");
     };
@@ -201,8 +199,9 @@ function Explore({ setsearchedTrips }) {
           ))}
         </ul>
 
-        <button className="button" disabled={errorMessage}>Search</button>
-
+        <button className="button" disabled={errorMessage}>
+          Search
+        </button>
       </form>
 
       <Link to="/">
