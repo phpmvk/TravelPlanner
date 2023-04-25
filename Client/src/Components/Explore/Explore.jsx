@@ -120,93 +120,133 @@ function Explore({ setsearchedTrips }) {
   };
 
   return (
-    <div className="Explore">
-      <h1>Explore</h1>
-      <form onSubmit={handleSubmit}>
-        <h4>Start of the Trip</h4>
-        <input
-          className="inputs"
-          type="datetime-local"
-          required
-          value={startDate}
-          onChange={handleStartDateChange}
-        ></input>
-        <h4>End of the trip</h4>
-        <input
-          className="inputs"
-          type="datetime-local"
-          required
-          value={endDate}
-          onChange={handleEndDateChange}
-        ></input>
-        {errorMessage && <p className="error">{errorMessage}</p>}
-        <h4>Departure City</h4>
-        <input className="inputs" placeholder="City" required></input>
+    <div className="explore-container">
+      <h1 className="Title">Explore</h1>
+      <div className="butt-section">
+        <Link to="/">
+          <button className="button">Home</button>
+        </Link>
+      </div>
+      <div className="Explore">
+        <form onSubmit={handleSubmit}>
+          <div className="form-section">
+            <div className="input-group">
+              <label htmlFor="startDate">Start of the Trip</label>
+              <input
+                className="inputs"
+                type="datetime-local"
+                required
+                id="startDate"
+                value={startDate}
+                onChange={handleStartDateChange}
+              />
+            </div>
 
-        <h4>Budget</h4>
-        <input
-          className="inputs"
-          name="budget"
-          placeholder="Price"
-          required
-        ></input>
-        <h4>Activities</h4>
-        <input
-          className="inputs"
-          placeholder="Name the activities you would like to do"
-          value={newActivity}
-          onChange={(e) => setNewActivity(e.target.value)}
-        ></input>
+            <div className="input-group">
+              <label htmlFor="endDate">End of the trip</label>
+              <input
+                className="inputs"
+                type="datetime-local"
+                required
+                id="endDate"
+                value={endDate}
+                onChange={handleEndDateChange}
+              />
+            </div>
 
-        <button
-          className="button"
-          type="button"
-          onClick={() => {
-            setSelectedActivities([...selectedActivities, newActivity]);
-            setNewActivity("");
-          }}
-          disabled={!newActivity.trim()}
-        >
-          Add activity
-        </button>
+            {errorMessage && <p className="error">{errorMessage}</p>}
 
-        <select className="inputs" onChange={handleActivitySelect}>
-          <option value="">Select activities</option>
-          {activities &&
-            activities.map((activity, index) => (
-              <option key={index} value={activity}>
-                {activity}
-              </option>
-            ))}
-        </select>
-        <ul>
-          {selectedActivities.map((activity, index) => (
-            <li key={index}>
-              {"#"}
-              {putCapLet(lowerCase(activity))}{" "}
+            <div className="input-group">
+              <label htmlFor="departureCity">Departure City</label>
+              <input
+                className="inputs"
+                placeholder="City"
+                required
+                id="departureCity"
+              />
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="budget">Budget</label>
+              <input
+                className="inputs"
+                name="budget"
+                placeholder="Price"
+                required
+                id="budget"
+              />
+            </div>
+
+            <div className="input-group">
+              <label htmlFor="activities">Activities</label>
+              <input
+                className="inputs"
+                placeholder="Name the activities you would like to do"
+                value={newActivity}
+                onChange={(e) => setNewActivity(e.target.value)}
+                id="activities"
+              />
+            </div>
+
+            <div className="contain-button">
               <button
+                className="button"
                 type="button"
-                className="buttonRemove"
-                onClick={() =>
-                  setSelectedActivities(
-                    selectedActivities.filter((a) => a !== activity)
-                  )
-                }
+                onClick={() => {
+                  setSelectedActivities([...selectedActivities, newActivity]);
+                  setNewActivity("");
+                }}
+                disabled={!newActivity.trim()}
               >
-                X
+                Add activity
               </button>
-            </li>
-          ))}
-        </ul>
+            </div>
 
-        <button className="button" disabled={errorMessage}>
-          Search
-        </button>
-      </form>
+            <div className="input-group">
+              <label htmlFor="activitySelect">Or select activities</label>
+              <select
+                className="inputs"
+                onChange={handleActivitySelect}
+                id="activitySelect"
+              >
+                <option value="">Select activities</option>
+                {activities &&
+                  activities.map((activity, index) => (
+                    <option key={index} value={activity}>
+                      {activity}
+                    </option>
+                  ))}
+              </select>
+            </div>
 
-      <Link to="/">
-        <button className="button">Home</button>
-      </Link>
+            <ul>
+              {selectedActivities.map((activity, index) => (
+                <li key={index}>
+                  {"#"}
+                  {putCapLet(lowerCase(activity))}{" "}
+                  <button
+                    type="button"
+                    className="buttonRemove"
+                    onClick={() =>
+                      setSelectedActivities(
+                        selectedActivities.filter((a) => a !== activity)
+                      )
+                    }
+                  >
+                    X
+                  </button>
+                </li>
+              ))}
+            </ul>
+
+            <div className="contain-button">
+              <button className="button" disabled={errorMessage}>
+                Search
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,0 +1,18 @@
+.button:hover {
+    background-color:  #5e9ad5;
+  }
+
+  .post-container{
+    /* border: solid 1px #236dc8; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-bottom: 20px;
+  } 
+
+  .Post{
+    display: flex;
+    flex-direction: column;
+    /* border: solid 1px #c82333; */
+    width: 800px;
+  }

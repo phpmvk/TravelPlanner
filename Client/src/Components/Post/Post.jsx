@@ -48,30 +48,54 @@ function Post() {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <h1>Create a new trip</h1>
-        <h4>Name of your trip</h4>
-        <input
-          className="inputs"
-          placeholder="Give a name to your trip"
-        ></input>
-        <h4>User</h4>
-        <input className="inputs" placeholder="User"></input>
-        <h4>Departure City</h4>
-        <input className="inputs" placeholder="City"></input>
-        <h4>Arrival City</h4>
-        <input className="inputs" placeholder="City"></input>
-        <h4>Budget</h4>
-        <input className="inputs" placeholder="Budget"></input>
-        <button className="button" type="submit">
-          Create
-        </button>
-      </form>
+    <div className="post-container">
+      <h1 className="Title">Create a new trip</h1>
+      <div className="Post">
+        <div className="butt-section">
+          <Link to="/">
+            <button className="button">Home</button>
+          </Link>
+        </div>
+        <div className="Explore">
+          <form onSubmit={handleSubmit}>
+            <div className="form-section">
+              <div className="input-group">
+                <label htmlFor="name">Name of your trip</label>
+                <input
+                  className="inputs"
+                  placeholder="Give a name to your trip"
+                />
+              </div>
 
-      <Link to="/">
-        <button className="button">Home</button>
-      </Link>
+              <div className="input-group">
+                <label htmlFor="user">User</label>
+                <input className="inputs" placeholder="User" />
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="depCity">Departure City</label>
+                <input className="inputs" placeholder="City" />
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="arrCity">Arrival City</label>
+                <input className="inputs" placeholder="City" />
+              </div>
+
+              <div className="input-group">
+                <label htmlFor="budget">Budget</label>
+                {/* <h4>Budget</h4> */}
+                <input className="inputs" placeholder="Budget" />
+              </div>
+              <div className="contain-button">
+                <button className="button" type="submit">
+                  Create
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
