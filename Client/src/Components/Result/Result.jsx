@@ -44,8 +44,6 @@ function Result({ searchedTrips }) {
       </div>
 
       {searchedTrips.map((trip) => {
-        console.log("journey", trip.journeys);
-        console.log("activities", trip.activities);
         return (
           <div className="trip-card" key={trip.id}>
             <h1 className="TripName">{trip.name}</h1>
@@ -120,7 +118,7 @@ function Result({ searchedTrips }) {
 
                           <p className="journeyP" >Price: {item.price}</p>
                           {item.additionalInfo && (
-                            <p>Additional Info: {item.additionalInfo}</p>
+                            <p className="journeyP" >Additional Info: {item.additionalInfo}</p>
                           )}
                         </li>
                       </div>

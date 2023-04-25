@@ -79,7 +79,7 @@ function Activity() {
 
             <div className="input-group">
               <label htmlFor="arrivalCity">Arrival City</label>
-              <input className="inputs" placeholder="City" required></input>
+              <input className="inputs" placeholder="City"></input>
             </div>
 
             <div className="input-group">
@@ -91,7 +91,7 @@ function Activity() {
               <label htmlFor="ActivityName">Activity Name</label>
               <input
                 className="inputs"
-                placeholder="Transport used"
+                placeholder="What did you do?"
                 required
               ></input>
             </div>
