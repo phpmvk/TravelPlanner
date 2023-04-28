@@ -7,7 +7,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://postgres:iheTFMWNu3j7zUaK@db.rznwvefwirzvhahwszkv.supabase.co:5432"
 }
 
 model Trip {
