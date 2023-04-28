@@ -35,6 +35,7 @@ function Explore({ setsearchedTrips }) {
 
   const fetchActivities = async () => {
     const activitiesList = await getActivitiesList();
+    if (!activitiesList) return
     const activities = Array.from(
       new Set(activitiesList.map((obj) => obj.activityType))
     );
