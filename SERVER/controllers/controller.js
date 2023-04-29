@@ -1,6 +1,8 @@
 /* global require, module */
+// const { prisma } = require('../prisma');
 
-const { PrismaClient } = require("@prisma/client");
+const { PrismaClient } = require('@prisma/client');
+
 const prisma = new PrismaClient();
 
 const controller = {};
@@ -15,7 +17,7 @@ const putCapLet = function (string) {
 
 controller.getAllTrips = async (req, res) => {
   try {
-    console.log("Calling getallTrips");
+    console.log('Calling getallTrips');
     const trips = await prisma.trip.findMany({});
     res.json(trips);
     res.status(200);
@@ -27,7 +29,7 @@ controller.getAllTrips = async (req, res) => {
 
 controller.getActivitiesList = async (req, res) => {
   try {
-    console.log("Calling getActivitiesList");
+    console.log('Calling getActivitiesList');
     const trips = await prisma.activity.findMany({});
     res.json(trips);
     res.status(200);
@@ -40,8 +42,8 @@ controller.getActivitiesList = async (req, res) => {
 controller.getSearchTrips = async (req, res) => {
   try {
     const a = req.query;
-    if (typeof a.activities === "string") {
-      a.activities = a.activities.split(" ");
+    if (typeof a.activities === 'string') {
+      a.activities = a.activities.split(' ');
     }
 
     const searchItemsArr = a.activities.map(lowerCase).map(putCapLet);
@@ -49,9 +51,9 @@ controller.getSearchTrips = async (req, res) => {
     const depCityTrip = putCapLet(lowerCase(a.depCity));
     const durationTrip = a.duration;
 
-    console.log("searchItemsArr", searchItemsArr);
-    console.log("budgetTrip", budgetTrip);
-    console.log("duation of the trip", durationTrip);
+    console.log('searchItemsArr', searchItemsArr);
+    console.log('budgetTrip', budgetTrip);
+    console.log('duation of the trip', durationTrip);
 
     const getTrips = await prisma.trip.findMany({
       where: {
@@ -85,7 +87,7 @@ controller.getSearchTrips = async (req, res) => {
 };
 
 controller.getTripById = async (req, res) => {
-  console.log("function getTripById called");
+  console.log('function getTripById called');
   const { id } = req.params;
   try {
     const trips = await prisma.trip.findUnique({
@@ -169,7 +171,7 @@ controller.createActivity = async (req, res) => {
 };
 
 controller.getTripByUser = async (req, res) => {
-  console.log("function getTripByUser called");
+  console.log('function getTripByUser called');
   console.log(req.query);
   if (req.query.user) {
     try {
@@ -216,7 +218,7 @@ controller.deleteItem = async (req, res) => {
   if (req.query.idjourney) {
     const id = req.query.idjourney;
     console.log(req.query);
-    console.log("id received", id);
+    console.log('id received', id);
     try {
       const deletedJourney = await prisma.journey.delete({
         where: {
@@ -232,7 +234,7 @@ controller.deleteItem = async (req, res) => {
   } else if (req.query.idactivity) {
     const id = req.query.idactivity;
     console.log(req.query);
-    console.log("id received", id);
+    console.log('id received', id);
     try {
       const deletedActivity = await prisma.activity.delete({
         where: {
@@ -248,7 +250,7 @@ controller.deleteItem = async (req, res) => {
   } else if (req.query.idtrip) {
     const id = req.query.idtrip;
     console.log(req.query);
-    console.log("id received", id);
+    console.log('id received', id);
     try {
       const deletedTrip = await prisma.trip.delete({
         where: {
@@ -266,6 +268,7 @@ controller.deleteItem = async (req, res) => {
 
 controller.modifyTrip = async (req, res) => {
   const id = req.query.idtrip2;
+  console.log('waaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', id);
   console.log(req.body);
   const { name, user, depCity, arrCity, budget, duration, start, end } =
     req.body;
@@ -289,7 +292,7 @@ controller.modifyTrip = async (req, res) => {
     res.json(updatedTrip);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Error updating trip" });
+    res.status(500).json({ message: 'Error updating trip' });
   }
 };
 
