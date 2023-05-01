@@ -579,7 +579,7 @@ function Modify() {
               <div className="SearchBar">
                 <input data-testid="userNameInput" className="inputs" placeholder="Name"></input>
                 <button className="button" type="submit">
-                  Search
+                  Find Trips
                 </button>
               </div>
             </div>
