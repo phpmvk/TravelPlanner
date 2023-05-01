@@ -7,7 +7,7 @@ import { postTrip } from "../../api.service";
 import "./Post.css";
 
 function Post() {
-  const { currentTrip, setcurrentTrip } = useContext(TripContext);
+  const { setcurrentTrip } = useContext(TripContext);
   // const [error, setError] = useState('');
 
   const navigate = useNavigate();
@@ -61,6 +61,7 @@ function Post() {
               <div className="input-group">
                 <label htmlFor="name">Name of your trip</label>
                 <input
+                  data-testid="tripNameInput"
                   className="inputs"
                   placeholder="Give a name to your trip"
                 />
@@ -68,22 +69,22 @@ function Post() {
 
               <div className="input-group">
                 <label htmlFor="user">User</label>
-                <input className="inputs" placeholder="User" />
+                <input data-testid="userInput" className="inputs" placeholder="User" />
               </div>
 
               <div className="input-group">
                 <label htmlFor="depCity">Departure City</label>
-                <input className="inputs" placeholder="City" />
+                <input data-testid="depCityInput" className="inputs" placeholder="City" />
               </div>
 
               <div className="input-group">
                 <label htmlFor="arrCity">Arrival City</label>
-                <input className="inputs" placeholder="City" />
+                <input data-testid="arrCityInput" className="inputs" placeholder="City" />
               </div>
 
               <div className="input-group">
                 <label htmlFor="budget">Budget</label>
-                <input className="inputs" placeholder="Budget" />
+                <input data-testid="budgetInput" className="inputs" placeholder="Budget" />
               </div>
               <div className="contain-button">
                 <button className="button" type="submit">

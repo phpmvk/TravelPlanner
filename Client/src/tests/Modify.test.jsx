@@ -2,6 +2,8 @@ import { render, screen } from '@testing-library/react';
 import App from '../App.jsx';
 import userEvent from '@testing-library/user-event';
 import { expect } from 'vitest';
+import { MemoryRouter } from 'react-router-dom';
+import Modify from '../Components/Modifiy/Modify.jsx';
 
 describe('Modify Trip', () => {
   it('clicking on Modify Trip from <App /> should navigate to modify page', async () => {
@@ -11,15 +13,20 @@ describe('Modify Trip', () => {
     expect(window.location.pathname).toBe('/modify')
   });
 
-  it('users should be able to enter a userName to conduct search', async () => {
-    render(<App />)
-    // const modifyTripButton = screen.getByRole('button', { name: 'Modify Trip' });
-    // await userEvent.click(modifyTripButton);
-    
-    //note that this test runs as if we were already on Modify Trip page. Why?
-    const inputField = screen.getByRole('button', { name: 'Search' });
-    expect(inputField).toBeInTheDocument();
-
-  });
+  test('should render an input field for userName search', async () => {
+    render(
+      <MemoryRouter>
+       <Modify />
+      </MemoryRouter> 
+      );
+    const homeButt = screen.getByRole('button', { name: 'Home' });
+    expect(homeButt).toBeInTheDocument();
+    const form = screen.getByRole('searchForm');
+    expect(form).toBeInTheDocument();
+    const startDateInput = screen.getByTestId('userNameInput')
+    expect(startDateInput).toBeInTheDocument();
+    const searchButt = screen.getByRole('button', { name: 'Search' });
+    expect(searchButt).toBeInTheDocument();
+  })
 
 });

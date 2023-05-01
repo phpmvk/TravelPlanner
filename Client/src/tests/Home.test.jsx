@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App.jsx';
 
-describe('App', () => {
+describe('Home', () => {
   test('renders Explore button', () => {
     render(<App />)
     const exploreButton = screen.getByRole('button', { name: 'Explore' });

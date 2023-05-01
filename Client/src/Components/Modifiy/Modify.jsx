@@ -573,11 +573,11 @@ function Modify() {
       </div>
       {isViewMode === "viewMode" ? (
         <div>
-          <form onSubmit={handleSubmit}>
+          <form role="searchForm" onSubmit={handleSubmit}>
             <div className="Search">
               <h5 className="UserSearch">Search a UserName</h5>
               <div className="SearchBar">
-                <input className="inputs" placeholder="Name"></input>
+                <input data-testid="userNameInput" className="inputs" placeholder="Name"></input>
                 <button className="button" type="submit">
                   Search
                 </button>

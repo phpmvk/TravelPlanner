@@ -129,7 +129,7 @@ function Explore({ setsearchedTrips }) {
         </Link>
       </div>
       <div className="Explore">
-        <form onSubmit={handleSubmit}>
+        <form role='searchForm' onSubmit={handleSubmit}>
           <div className="form-section">
             <div className="input-group">
               <label htmlFor="startDate">Start of the Trip</label>
