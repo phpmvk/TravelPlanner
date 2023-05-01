@@ -54,7 +54,7 @@ function Activity() {
 
       <div className="butt-section">
         <Link to="/">
-          <button className="button">Home</button>
+          <button data-testid="homeButt" className="button">Home</button>
         </Link>
       </div>
       <div className="Activity">
@@ -64,32 +64,33 @@ function Activity() {
 
             <div className="input-group">
               <label htmlFor="startDate">Start of the activity</label>
-              <input className="inputs" type="datetime-local" required></input>
+              <input data-testid="activityStart" className="inputs" type="datetime-local" required></input>
             </div>
 
             <div className="input-group">
               <label htmlFor="endDate">End of the activity</label>
-              <input className="inputs" type="datetime-local" required></input>
+              <input data-testid="activityEnd" className="inputs" type="datetime-local" required></input>
             </div>
 
             <div className="input-group">
               <label htmlFor="departureCity">Departure City</label>
-              <input className="inputs" placeholder="City" required></input>
+              <input data-testid="depCity" className="inputs" placeholder="City" required></input>
             </div>
 
             <div className="input-group">
               <label htmlFor="arrivalCity">Arrival City</label>
-              <input className="inputs" placeholder="City"></input>
+              <input data-testid="arrCity" className="inputs" placeholder="City"></input>
             </div>
 
             <div className="input-group">
               <label htmlFor="Price">Price</label>
-              <input className="inputs" placeholder="Price" required></input>
+              <input data-testid="price" className="inputs" placeholder="Price" required></input>
             </div>
 
             <div className="input-group">
               <label htmlFor="ActivityName">Activity Name</label>
               <input
+                data-testid="whatDidYouDo" 
                 className="inputs"
                 placeholder="What did you do?"
                 required
@@ -98,7 +99,7 @@ function Activity() {
 
             <div className="input-group">
               <label htmlFor="AdditionalInfo">Additional Info?</label>
-              <input className="inputs" placeholder="..."></input>
+              <input data-testid="additionalInfo" className="inputs" placeholder="..."></input>
             </div>
 
             <div className="contain-buttons">
@@ -110,7 +111,7 @@ function Activity() {
 
               <div className="activity-button">
                 <button className="button" onClick={handleCancelActivity}>
-                  Cancel activity
+                  Cancel Activity
                 </button>
               </div>
             </div>

@@ -39,7 +39,7 @@ function Result({ searchedTrips }) {
       <h1 className="Title">Results</h1>
       <div className="butt-section">
         <Link to="/">
-          <button className="button">Home</button>
+          <button data-testid='homeButt' className="button">Home</button>
         </Link>
       </div>
 
@@ -57,6 +57,7 @@ function Result({ searchedTrips }) {
 
             <div className="butt-section">
               <button
+                data-testid='show-hide-butt'
                 className="button"
                 onClick={() => {
                   if (selectedTripId !== trip.id) {
