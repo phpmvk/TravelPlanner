@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App.jsx';
 
-describe('App', () => {
+describe('Home', () => {
   test('renders Explore button', () => {
     render(<App />)
     const exploreButton = screen.getByRole('button', { name: 'Explore' });
@@ -10,13 +10,13 @@ describe('App', () => {
 
   test('renders Post button', () => {
     render(<App />)
-    const exploreButton = screen.getByRole('button', { name: 'Post' });
-    expect(exploreButton).toBeInTheDocument();
+    const postButton = screen.getByRole('button', { name: 'Post' });
+    expect(postButton).toBeInTheDocument();
   });
 
   test('renders Modify Trip button', () => {
     render(<App />)
-    const exploreButton = screen.getByRole('button', { name: 'Modify Trip' });
-    expect(exploreButton).toBeInTheDocument();
+    const modifyTripButton = screen.getByRole('button', { name: 'Modify Trip' });
+    expect(modifyTripButton).toBeInTheDocument();
   });
 });

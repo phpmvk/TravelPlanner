@@ -87,7 +87,7 @@ function Trip() {
     <div className="Trip">
       <div className="butt-section">
         <Link to="/">
-          <button className="button">Home</button>
+          <button data-testid='homeButt' className="button">Home</button>
         </Link>
       </div>
 
