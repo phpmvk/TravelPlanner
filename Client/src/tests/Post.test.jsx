@@ -35,7 +35,7 @@ describe('Post', () => {
     expect(arrCityInput).toBeInTheDocument();
     const budgetInput = screen.getByTestId('budgetInput')
     expect(budgetInput).toBeInTheDocument();
-    const createButt = screen.getByRole('button', { name: 'Create' });
+    const createButt = screen.getByRole('button', { name: 'Create Trip' });
     expect(createButt).toBeInTheDocument();
   })
 

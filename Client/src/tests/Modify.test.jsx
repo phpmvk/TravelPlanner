@@ -25,7 +25,7 @@ describe('Modify Trip', () => {
     expect(form).toBeInTheDocument();
     const startDateInput = screen.getByTestId('userNameInput')
     expect(startDateInput).toBeInTheDocument();
-    const searchButt = screen.getByRole('button', { name: 'Search' });
+    const searchButt = screen.getByRole('button', { name: 'Find Trips' });
     expect(searchButt).toBeInTheDocument();
   })
 
