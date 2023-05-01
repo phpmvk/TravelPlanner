@@ -88,7 +88,7 @@ function Post() {
               </div>
               <div className="contain-button">
                 <button className="button" type="submit">
-                  Create
+                  Create Trip
                 </button>
               </div>
             </div>

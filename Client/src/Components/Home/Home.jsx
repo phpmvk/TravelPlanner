@@ -11,15 +11,15 @@ function Home() {
 
       <div className="buttonshome">
         <Link to="/explore">
-          <button className="buttonhome">Explore</button>
+          <button data-test-id="test-example" className="buttonhome">Explore</button>
         </Link>
 
         <Link to="/post">
-          <button className="buttonhome">Post</button>
+          <button data-test-id="test-example" className="buttonhome">Post</button>
         </Link>
 
         <Link to="/modify">
-          <button className="buttonhome">Modify Trip</button>
+          <button data-test-id="test-example" className="buttonhome">Modify Trip</button>
         </Link>
       </div>
     </div>
