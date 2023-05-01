@@ -45,15 +45,15 @@ controller.getSearchTrips = async (req, res) => {
     if (typeof a.activities === 'string') {
       a.activities = a.activities.split(' ');
     }
+    if (!a.activities) {
+      res.status(400).send();
+      return;
+    }
 
     const searchItemsArr = a.activities.map(lowerCase).map(putCapLet);
     const budgetTrip = a.budget;
     const depCityTrip = putCapLet(lowerCase(a.depCity));
     const durationTrip = a.duration;
-
-    console.log('searchItemsArr', searchItemsArr);
-    console.log('budgetTrip', budgetTrip);
-    console.log('duation of the trip', durationTrip);
 
     const getTrips = await prisma.trip.findMany({
       where: {
@@ -71,18 +71,15 @@ controller.getSearchTrips = async (req, res) => {
       },
     });
 
-    console.log(getTrips);
-
     const results = getTrips
       .filter((trip) => trip.budget <= budgetTrip)
       .filter((trip) => trip.depCity === depCityTrip)
       .filter((trip) => trip.duration <= durationTrip);
-
     res.json(results);
     res.status(200);
   } catch (error) {
     console.log(error);
-    res.status(400);
+    res.status(500);
   }
 };
 
@@ -99,80 +96,112 @@ controller.getTripById = async (req, res) => {
         activities: true,
       },
     });
+    if (!trips) {
+      res.status(404).send();
+      return;
+    }
     res.json(trips);
-    res.status(200);
   } catch (error) {
     console.log(error);
-    res.status(400);
+    res.status(500);
   }
 };
 
 controller.createTrip = async (req, res) => {
   try {
+    const { name, user, depCity, arrCity, budget, duration } = req.body;
+    if (!name || !user || !depCity || !budget) {
+      res.status(400).send();
+      return;
+    }
     const trip = await prisma.trip.create({
       data: {
-        name: req.body.name,
-        user: req.body.user,
-        depCity: req.body.depCity,
-        arrCity: req.body.arrCity,
-        budget: req.body.budget,
-        duration: req.body.duration,
+        name: name,
+        user: user,
+        depCity: depCity,
+        arrCity: arrCity,
+        budget: budget,
+        duration: duration,
       },
     });
-    res.json(trip);
-    res.status(200);
+    res.status(201).json(trip);
   } catch (error) {
     console.log(error);
-    res.status(400);
+    res.status(500);
   }
 };
 
 controller.createJourney = async (req, res) => {
   try {
+    const { start, end, depCity, arrCity, price, transportType, idTrip } =
+      req.body;
+    if (
+      !start ||
+      !end ||
+      !depCity ||
+      !arrCity ||
+      !price ||
+      !transportType ||
+      !idTrip
+    ) {
+      res.status(400).send();
+      return;
+    }
     const journey = await prisma.journey.create({
       data: {
-        start: req.body.start,
-        end: req.body.end,
-        depCity: req.body.depCity,
-        arrCity: req.body.arrCity,
-        price: req.body.price,
-        transportType: req.body.transportType,
-        trip: { connect: { id: req.body.idTrip } },
+        start: start,
+        end: end,
+        depCity: depCity,
+        arrCity: arrCity,
+        price: price,
+        transportType: transportType,
+        trip: { connect: { id: idTrip } },
       },
     });
-    res.json(journey);
-    res.status(200);
+    res.status(201).json(journey);
   } catch (error) {
     console.log(error);
-    res.status(400);
+    res.status(500);
   }
 };
 
 controller.createActivity = async (req, res) => {
   try {
+    const {
+      start,
+      end,
+      depCity,
+      arrCity,
+      price,
+      activityType,
+      additionalInfo,
+      idTrip,
+    } = req.body;
+    if (!start || !end || !depCity || !price || !activityType || !idTrip) {
+      res.status(400).send();
+      return;
+    }
     const activity = await prisma.activity.create({
       data: {
-        start: req.body.start,
-        end: req.body.end,
-        depCity: req.body.depCity,
-        arrCity: req.body.arrCity,
-        price: req.body.price,
-        activityType: req.body.activityType,
-        additionalInfo: req.body.additionalInfo,
-        trip: { connect: { id: req.body.idTrip } },
+        start: start,
+        end: end,
+        depCity: depCity,
+        arrCity: arrCity,
+        price: price,
+        activityType: activityType,
+        additionalInfo: additionalInfo,
+        trip: { connect: { id: idTrip } },
       },
     });
-    res.json(activity);
-    res.status(200);
+    res.status(201).json(activity);
   } catch (error) {
     console.log(error);
-    res.status(400);
+    res.status(500);
   }
 };
 
 controller.getTripByUser = async (req, res) => {
   console.log('function getTripByUser called');
-  console.log(req.query);
   if (req.query.user) {
     try {
       const user = req.query.user;
@@ -185,40 +214,51 @@ controller.getTripByUser = async (req, res) => {
           activities: true,
         },
       });
+      if (trips.length < 1) {
+        res.status(404).send();
+        return;
+      }
       res.json(trips);
-      console.log(trips);
       res.status(200);
     } catch (error) {
       console.log(error);
-      res.status(400);
+      res.status(500);
     }
   } else if (req.query.idTrip) {
     try {
       const idTrip = req.query.idTrip;
-      const trips = await prisma.trip.findMany({
-        where: {
-          id: parseInt(idTrip),
-        },
-        include: {
-          journeys: true,
-          activities: true,
-        },
-      });
-      res.json(trips);
-      console.log(trips);
-      res.status(200);
+      if (!isNaN(idTrip)) {
+        const trips = await prisma.trip.findMany({
+          where: {
+            id: parseInt(idTrip),
+          },
+          include: {
+            journeys: true,
+            activities: true,
+          },
+        });
+
+        if (trips.length < 1) {
+          res.status(404).send();
+          return;
+        }
+        res.json(trips);
+        res.status(200);
+      } else {
+        res.status(400).send();
+      }
     } catch (error) {
       console.log(error);
-      res.status(400);
+      res.status(500);
     }
+  } else {
+    res.status(400).send();
   }
 };
 
 controller.deleteItem = async (req, res) => {
   if (req.query.idjourney) {
     const id = req.query.idjourney;
-    console.log(req.query);
-    console.log('id received', id);
     try {
       const deletedJourney = await prisma.journey.delete({
         where: {
@@ -229,12 +269,11 @@ controller.deleteItem = async (req, res) => {
       res.status(200);
     } catch (error) {
       console.log(error);
-      res.status(400);
+      res.status(500);
     }
   } else if (req.query.idactivity) {
     const id = req.query.idactivity;
-    console.log(req.query);
-    console.log('id received', id);
+
     try {
       const deletedActivity = await prisma.activity.delete({
         where: {
@@ -245,12 +284,10 @@ controller.deleteItem = async (req, res) => {
       res.status(200);
     } catch (error) {
       console.log(error);
-      res.status(400);
+      res.status(500);
     }
   } else if (req.query.idtrip) {
     const id = req.query.idtrip;
-    console.log(req.query);
-    console.log('id received', id);
     try {
       const deletedTrip = await prisma.trip.delete({
         where: {
@@ -261,15 +298,19 @@ controller.deleteItem = async (req, res) => {
       res.status(200);
     } catch (error) {
       console.log(error);
-      res.status(400);
+      res.status(500);
     }
+  } else {
+    res.status(400).send();
   }
 };
 
 controller.modifyTrip = async (req, res) => {
   const id = req.query.idtrip2;
-  console.log('waaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', id);
-  console.log(req.body);
+  if (!id) {
+    res.status(400).send();
+    return;
+  }
   const { name, user, depCity, arrCity, budget, duration, start, end } =
     req.body;
 

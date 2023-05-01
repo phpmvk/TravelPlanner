@@ -1,6 +1,6 @@
 const request = require('supertest');
 const { PrismaClient } = require('@prisma/client');
-const app = require('../index');
+const { server, app } = require('../index');
 const prisma = new PrismaClient();
 
 const {
@@ -8,10 +8,19 @@ const {
   journeyData,
   activityData,
   updatedTripData,
+  badTripData,
+  badJourneyData,
+  badUpdatedTripData,
+  badActivityData,
 } = require('./mocks');
 
 beforeEach(() => {
   jest.clearAllMocks();
+});
+
+afterAll(async () => {
+  await prisma.$disconnect(); // Close the Prisma client
+  server.close(); // Close the Express server
 });
 
 describe('UNIT TESTS', () => {
@@ -19,22 +28,27 @@ describe('UNIT TESTS', () => {
     it('Should return an array of trips with status 200', async () => {
       const res = await request(app).get('/result').query({
         activities: 'hiking',
-        budget: 1000,
-        depCity: 'New York',
+        budget: 100,
+        depCity: 'Los Angeles',
         duration: 7,
       });
 
       expect(res.statusCode).toEqual(200);
       expect(Array.isArray(res.body)).toBe(true);
     });
+    it('Should return status 400 if query is empty', async () => {
+      const res = await request(app).get('/result').query({});
+
+      expect(res.statusCode).toEqual(400);
+    });
   });
 
   describe('POST /post - createTrip', () => {
     // Test createTrip route
-    it('Should create a new trip and return the created trip with status 200', async () => {
+    it('Should create a new trip and return the created trip with status 201', async () => {
       const res = await request(app).post('/post').send(tripData);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.statusCode).toEqual(201);
       expect(res.body).toHaveProperty('name', tripData.name);
       expect(res.body).toHaveProperty('user', tripData.user);
       expect(res.body).toHaveProperty('depCity', tripData.depCity);
@@ -42,14 +56,22 @@ describe('UNIT TESTS', () => {
       expect(res.body).toHaveProperty('budget', tripData.budget);
       expect(res.body).toHaveProperty('duration', tripData.duration);
     });
+    it('Should return status 400 if required input field is missing', async () => {
+      const res = await request(app).post('/post').send(badTripData);
+
+      expect(res.statusCode).toEqual(400);
+    });
   });
 
   describe('POST /journey - createJourney', () => {
     // Test createJourney route
     it('Should create a new journey and return the created journey with status 200', async () => {
+      const resTrip = await request(app).post('/post').send(tripData);
+      const idTrip = resTrip.body.id;
+      journeyData.idTrip = idTrip;
       const res = await request(app).post('/journey').send(journeyData);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.statusCode).toEqual(201);
       expect(res.body).toMatchObject({
         idTrip: journeyData.idTrip,
         depCity: journeyData.depCity,
@@ -66,14 +88,22 @@ describe('UNIT TESTS', () => {
         -2
       );
     });
+    it('Should return status 400 if required input field is missing', async () => {
+      const res = await request(app).post('/journey').send(badJourneyData);
+
+      expect(res.statusCode).toEqual(400);
+    });
   });
 
   describe('POST /activity - createActivity', () => {
     // Test createActivity route
     it('Should create a new activity and return the created activity with status 200', async () => {
+      const resTrip = await request(app).post('/post').send(tripData);
+      const idTrip = resTrip.body.id;
+      activityData.idTrip = idTrip;
       const res = await request(app).post('/activity').send(activityData);
 
-      expect(res.statusCode).toEqual(200);
+      expect(res.statusCode).toEqual(201);
       expect(res.body).toMatchObject({
         idTrip: activityData.idTrip,
         depCity: activityData.depCity,
@@ -91,6 +121,11 @@ describe('UNIT TESTS', () => {
         -2
       );
     });
+    it('Should return status 400 if required input field is missing', async () => {
+      const res = await request(app).post('/activity').send(badActivityData);
+
+      expect(res.statusCode).toEqual(400);
+    });
   });
 
   describe('GET /trip:id - getTripById', () => {
@@ -102,11 +137,18 @@ describe('UNIT TESTS', () => {
       expect(res.statusCode).toEqual(200);
       expect(res.body).toHaveProperty('id', id);
     });
+    it('Should return 404 if trip is not found', async () => {
+      const res = await request(app).get(`/trip/420blazeit`);
+
+      expect(res.statusCode).toEqual(404);
+    });
   });
 
   describe('GET /modify - getTripByUser', () => {
     // Test getTripByUser route
     it('Should return an array of trips with the specified user and status 200', async () => {
+      await request(app).post('/post').send(tripData);
+
       const user = 'Test User';
       const res = await request(app).get('/modify').query({ user });
 
@@ -115,6 +157,17 @@ describe('UNIT TESTS', () => {
       res.body.forEach((trip) => {
         expect(trip).toHaveProperty('user', user);
       });
+    });
+    it('Should return status 400 if required input field is missing', async () => {
+      const res = await request(app).get('/modify').query({});
+
+      expect(res.statusCode).toEqual(400);
+    });
+    it('Should return status 404 if trip does not exist', async () => {
+      const idTrip = 9999999;
+      const res = await request(app).get('/modify').query({ idTrip });
+
+      expect(res.statusCode).toEqual(404);
     });
   });
 
@@ -128,6 +181,43 @@ describe('UNIT TESTS', () => {
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.id).toBe(idtrip);
+    });
+
+    it('Should delete a journey with the specified ID and return the deleted journey with status 200', async () => {
+      const resTrip = await request(app).post('/post').send(tripData);
+      const idTrip = resTrip.body.id;
+      journeyData.idTrip = idTrip;
+
+      const resJourney = await request(app).post('/journey').send(journeyData);
+
+      const idjourney = resJourney.body.id;
+      const res = await request(app).delete('/modify').query({ idjourney });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.id).toBe(idjourney);
+    });
+
+    it('Should delete an activity with the specified ID and return the deleted activity with status 200', async () => {
+      const resTrip = await request(app).post('/post').send(tripData);
+      const idTrip = resTrip.body.id;
+      activityData.idTrip = idTrip;
+
+      const resActivity = await request(app)
+        .post('/activity')
+        .send(activityData);
+
+      const idactivity = resActivity.body.id;
+
+      const res = await request(app).delete('/modify').query({ idactivity });
+
+      expect(res.statusCode).toEqual(200);
+      expect(res.body.id).toBe(idactivity);
+    });
+
+    it('Should return status 400 if required input field is missing', async () => {
+      const res = await request(app).delete('/modify').query({});
+
+      expect(res.statusCode).toEqual(400);
     });
   });
 
@@ -153,9 +243,14 @@ describe('UNIT TESTS', () => {
         -2
       );
     });
+    it('Should return status 400 if required input field is missing', async () => {
+      const res = await request(app).put('/modify').query({});
+
+      expect(res.statusCode).toEqual(400);
+    });
   });
 
-  describe('PUT /explore - getActivitiesList', () => {
+  describe('GET /explore - getActivitiesList', () => {
     // Test getActivitiesList route
     it('Should return an array of all activities with status 200', async () => {
       const res = await request(app).get('/explore');
