@@ -1,7 +1,7 @@
 export interface Trip {
   id?: number, 
   name: string,
-  user: string,
+  user?: string,
   depCity: string,
   arrCity: string,
   budget: number,

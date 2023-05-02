@@ -20,7 +20,17 @@ import { Activity, Journey, JourneyAndActivity, Trip } from "../../types/types";
 
 function Modify() {
   const [trips, setTrips] = useState<Trip[]>([]);
-  const [trip, setTrip] = useState<Trip | null>(null);
+  const [trip, setTrip] = useState<Trip>({
+    id: 0, 
+    name: '',
+    user: '',
+    depCity: '',
+    arrCity: '',
+    budget: 0,
+    duration: 0,
+    journeys: [],
+    activities: [],
+  });
   const [searchResult, setSearchResult] = useState(false);
   const [isViewMode, setMode] = useState("viewMode");
 
@@ -193,7 +203,7 @@ function Modify() {
     
       await postJourney(newJourney);
       
-      fetchTripsByUser(trip.user);
+      fetchTripsByUser(trip.user!);
       
       setMode("viewMode");
       
@@ -219,7 +229,7 @@ function Modify() {
       };
 
       await postActivity(newActivity);
-      fetchTripsByUser(trip.user);
+      fetchTripsByUser(trip.user!);
       setMode("viewMode");
     }
   };
@@ -341,7 +351,10 @@ function Modify() {
     // const { currentTrip, setcurrentTrip } = useContext(TripContext);
 
     console.log("trips", trips);
-
+    function handleOnChange(e: any) {
+      setTrip({ ...trip, name: (e.target as HTMLInputElement).value || '' });
+    }
+    
     return (
       <div className="Edit">
         <form onSubmit={handleEditTrip}>
@@ -354,7 +367,7 @@ function Modify() {
               <input
                 className="inputs"
                 value={trip ? trip.name : ''}
-                onChange={(e) => setTrip({ ...trip, name: e.target.value })}
+                onChange={handleOnChange}
               ></input>
             </div>
 
@@ -390,7 +403,7 @@ function Modify() {
               <input
                 className="inputs"
                 value={trip.budget}
-                onChange={(e) => setTrip({ ...trip, budget: e.target.value })}
+                onChange={(e) => setTrip({ ...trip, budget: +e.target.value })}
               ></input>
             </div>
             <div className="contain-button">
