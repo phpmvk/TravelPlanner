@@ -36,7 +36,7 @@ export const postJourney = async (journey: Journey) => {
   }
 };
 
-export const deleteJourney = async (journey: Journey) => {
+export const deleteJourney = async (journey: Journey | Activity) => {
   try { 
     const responseJourney = await axios.delete(rootUrl + 'modify?idjourney=' + journey.id)
     const trip = await getTripById(journey.idTrip);
@@ -78,7 +78,7 @@ export const deleteJourney = async (journey: Journey) => {
   }
 };
 
-export const deleteActivity = async (activity: Activity) => {
+export const deleteActivity = async (activity: Activity | Journey) => {
   try {
     const activities = axios.delete(rootUrl + 'modify?idactivity=' + activity.id)
     const trip = await getTripById(activity.idTrip);
@@ -180,7 +180,7 @@ export const getTripsByUser = async (url:string) => {
   }
 };
 
-export const deleteTrip = async (tripId: string) => {
+export const deleteTrip = async (tripId: number) => {
   try {
     console.log("deleting a trip");
     const response = await axios.delete(rootUrl + 'modify?idtrip=' + tripId)

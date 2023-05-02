@@ -7,7 +7,7 @@ export default defineConfig({
     react(),
   ],
   //@ts-ignore
-  vitest: {
+  test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/tests/setup.js',

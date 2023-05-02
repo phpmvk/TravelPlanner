@@ -20,8 +20,10 @@ export interface Journey {
   arrCity: string,
   price: number,
   transportType: string,
-  trip: Trip
+  trip?: Trip
   idTrip: number,
+  activityType?: string,
+  additionalInfo?: string,
 }
 
 export interface Activity {
@@ -33,6 +35,9 @@ export interface Activity {
   price: number,
   activityType: string,
   additionalInfo?: string,
-  trip: Trip,
-  idTrip: number
+  trip?: Trip,
+  idTrip: number,
+  transportType?: string,
 }
+
+export type JourneyAndActivity = Journey | Activity
