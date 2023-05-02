@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 
@@ -38,11 +39,11 @@ function Post() {
 
     console.log(newTrip);
     // Send to back-End
-    const currentTrip = await postTrip(newTrip);
+    const response = await postTrip(newTrip);
 
-    if (currentTrip.id) {
-      setcurrentTrip(currentTrip);
-      navigate(`/trip/${currentTrip.id}`);
+    if (response.data.id) {
+      setcurrentTrip(response.data);
+      navigate(`/trip/${response.data.id}`);
     }
 
     e.target.reset();

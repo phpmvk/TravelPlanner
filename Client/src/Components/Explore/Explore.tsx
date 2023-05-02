@@ -1,10 +1,14 @@
+//@ts-nocheck
 import { Link, useNavigate } from "react-router-dom";
 import { parseISO } from "date-fns";
 import { useState, React, useEffect } from "react";
 import PropTypes from "prop-types";
 
 import { getSearchedTrips, getActivitiesList } from "../../api.service";
+import { diffMinutes } from "../../utils/utils";
 import "./Explore.css";
+
+
 
 function Explore({ setsearchedTrips }) {
   const [activities, setActivities] = useState(null);
@@ -79,15 +83,6 @@ function Explore({ setsearchedTrips }) {
         ...e.target[4].value.split(",").map(lowerCase).map(putCapLet),
       ],
     };
-
-    function diffMinutes(date1, date2) {
-      if (date2 > date1) {
-        const diff = Math.abs(date2 - date1);
-        return Math.floor(diff / (1000 * 60));
-      }
-      const diff = Math.abs(date1 - date2);
-      return Math.floor(diff / (1000 * 60));
-    }
 
     const duration = diffMinutes(newTrip.end, newTrip.start);
     console.log(duration);

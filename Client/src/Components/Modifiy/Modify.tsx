@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Link } from "react-router-dom";
 import { useState, React } from "react";
 import moment from "moment";
@@ -13,8 +14,9 @@ import {
   postJourney,
   postActivity,
   getTripById,
-  diffMinutes,
 } from "../../api.service";
+
+import { diffMinutes } from "../../utils/utils";
 
 function Modify() {
   const [trips, setTrips] = useState([]);
@@ -138,13 +140,8 @@ function Modify() {
   };
 
   const fetchTripsByUser = async function (user) {
-    const constructSearchUrl = function () {
-      const arrRes = ["http://localhost:3001/modify?user="];
-      arrRes.push(user);
-      return arrRes.join("");
-    };
 
-    const url = constructSearchUrl();
+    const url = `http://localhost:3001/modify?user=${user}`;
 
     const resultOfSearch = await getTripsByUser(url);
 

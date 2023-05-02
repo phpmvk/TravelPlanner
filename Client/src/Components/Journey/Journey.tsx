@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { useNavigate, Link } from "react-router-dom";
 import { parseISO } from "date-fns";
 import { useContext, React } from "react";
