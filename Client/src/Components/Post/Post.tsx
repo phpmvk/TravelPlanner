@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useContext, React } from "react";
+import { useContext } from "react";
 
 import { TripContext } from "../../App";
 import { postTrip } from "../../api.service";
@@ -7,20 +7,21 @@ import { postTrip } from "../../api.service";
 import "./Post.css";
 
 function Post() {
+  //@ts-ignore
   const { setcurrentTrip } = useContext(TripContext);
   // const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
-  const putCapLet = function (string) {
+  const putCapLet = function (string: any) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  function lowerCase(string) {
+  function lowerCase(string: any ) {
     return string.toLowerCase();
   }
 
-  const handleSubmit = async function (e) {
+  const handleSubmit = async function (e: any) {
     e.preventDefault();
 
     const budget = parseFloat(e.target[4].value);

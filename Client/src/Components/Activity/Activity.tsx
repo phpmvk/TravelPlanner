@@ -1,21 +1,22 @@
 import { useNavigate, Link } from "react-router-dom";
 import { parseISO } from "date-fns";
-import { useContext, React } from "react";
+import { useContext } from "react";
 
 import { postActivity } from "../../api.service";
 import { TripContext } from "../../App";
 import "./Activity.css";
 
 function Activity() {
+  //@ts-ignore
   const { currentTrip } = useContext(TripContext);
 
   const navigate = useNavigate();
 
-  const putCapLet = function (string) {
+  const putCapLet = function (string:any) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  function lowerCase(string) {
+  function lowerCase(string:any) {
     return string.toLowerCase();
   }
 
@@ -23,7 +24,7 @@ function Activity() {
     navigate(`/trip/${currentTrip.id}`);
   }
 
-  const handleSubmit = async function (e) {
+  const handleSubmit = async function (e:any) {
     e.preventDefault();
 
     const start = parseISO(e.target[0].value);

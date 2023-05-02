@@ -1,4 +1,4 @@
-import { createContext,useState, React } from 'react'
+import { createContext,useState } from 'react'
 import { BrowserRouter, Routes, Route , useParams} from 'react-router-dom';
 
 import Home from './Components/Home/Home'
@@ -12,6 +12,7 @@ import Modify from './Components/Modifiy/Modify';
 
 import './App.css'
 
+//@ts-ignore
 export const TripContext = createContext();
 
 function App() {
@@ -24,7 +25,7 @@ function App() {
     <BrowserRouter>
       <TripContext.Provider value={{ currentTrip, setcurrentTrip }}>
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/explore" element={<Explore setsearchedTrips={setsearchedTrips} />} />
           <Route path="/post" element={<Post />} />
           <Route path="/result" element={<Result searchedTrips={searchedTrips}/>} />

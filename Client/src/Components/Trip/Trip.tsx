@@ -1,5 +1,6 @@
+//@ts-nocheck
 import { Link, useParams, useNavigate } from "react-router-dom";
-import { useState, useEffect, React } from "react";
+import { useState, useEffect } from "react";
 import moment from "moment";
 import { parseISO } from "date-fns";
 
