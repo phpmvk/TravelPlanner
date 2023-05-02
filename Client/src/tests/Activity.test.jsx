@@ -1,8 +1,9 @@
+import React from 'react'
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { expect } from 'vitest';
-import { TripContext } from '../App.jsx';
-import Activity from '../Components/Activity/Activity.jsx';
+import { TripContext } from '../App';
+import Activity from '../Components/Activity/Activity';
 
 test('should render activity form and buttons', async ()=> {
   const currentTrip = {

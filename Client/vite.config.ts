@@ -6,4 +6,10 @@ export default defineConfig({
   plugins: [
     react(),
   ],
+  //@ts-ignore
+  vitest: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/tests/setup.js',
+  },
 })

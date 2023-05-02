@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { expect } from 'vitest';
 import Journey from '../Components/Journey/Journey';
-import { TripContext } from '../App.jsx';
+import { TripContext } from '../App';
 
 test('should render journey input form and buttons', async ()=> {
   const currentTrip = {
