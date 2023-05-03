@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc & vite build",
     "preview": "vite preview",
-    "test": "vitest --ui --environment jsdom"
+    "test": "vitest --ui --environment jsdom",
+    "lint": "eslint '**/*.{js,jsx,ts,tsx}'"
   },
   "dependencies": {
     "@testing-library/jest-dom": "^5.16.5",
@@ -16,6 +17,8 @@
     "@types/jest": "^29.5.1",
     "axios": "^1.3.6",
     "date-fns": "^2.29.3",
+    "eslint": "^8.39.0",
+    "eslint-plugin-react": "^7.32.2",
     "jsdom": "^21.1.1",
     "moment": "^2.29.4",
     "prop-types": "^15.8.1",

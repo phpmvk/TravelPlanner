@@ -1,7 +1,7 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import App from '../App';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, expect } from 'vitest';
+import { expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import Explore from '../Components/Explore/Explore';
 

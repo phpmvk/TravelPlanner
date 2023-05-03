@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { expect } from 'vitest';
 import Post from '../Components/Post/Post';
 import { MemoryRouter } from 'react-router-dom';
-import { useContext, React } from "react";
+import { React } from "react";
 
 describe('Post', () => {
   test('clicking on Post from <App /> should navigate to post page', async () => {
