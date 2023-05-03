@@ -70,7 +70,6 @@ function Explore({ setsearchedTrips } : {setsearchedTrips: Dispatch<SetStateActi
     };
 
     const duration = diffMinutes(newTrip.end, newTrip.start);
-    console.log(duration);
 
     const constructSearchUrl = function () {
       const arrRes = ["http://localhost:3001/result/?"];
@@ -97,7 +96,6 @@ function Explore({ setsearchedTrips } : {setsearchedTrips: Dispatch<SetStateActi
 
     const resultOfSearch = await getSearchedTrips(url);
     setsearchedTrips(resultOfSearch);
-    // e.currentTarget.reset();
     navigate("/result");
   };
 

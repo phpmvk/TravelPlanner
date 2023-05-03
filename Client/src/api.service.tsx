@@ -79,7 +79,6 @@ export const deleteJourney = async (journey: Journey | Activity) => {
 };
 
 export const deleteActivity = async (activity: Activity | Journey) => {
-  console.log('-0-0-0-0-0-0 DELETE the ACTIVITY')
   try {
     const activities = axios.delete(rootUrl + 'modify?idactivity=' + activity.id)
     const trip = await getTripById(activity.idTrip);
@@ -183,7 +182,6 @@ export const getTripsByUser = async (url:string) => {
 
 export const deleteTrip = async (tripId: number) => {
   try {
-    console.log("deleting a trip");
     const response = await axios.delete(rootUrl + 'modify?idtrip=' + tripId)
     return response.data;
   } catch (error) {
@@ -193,7 +191,6 @@ export const deleteTrip = async (tripId: number) => {
 
 export const updateTrip = async (trip: Trip) => {
   try {
-    console.log('-0-0-0-0-0-0 were in the updateTrip')
     const response = await axios.put(rootUrl + 'modify?idtrip2=' + trip.id, trip)
     return response.data;
   } catch (error) {

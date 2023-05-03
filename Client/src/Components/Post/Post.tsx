@@ -9,35 +9,30 @@ import "./Post.css";
 
 function Post() {
   const { setcurrentTrip } = useContext(TripContext);
-  // const [error, setError] = useState('');
 
   const navigate = useNavigate();
 
-  const handleSubmit = async function (e: any) {
+  const handleSubmit = async function (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const budget = parseFloat(e.target[4].value);
-    const duration = parseInt(e.target[5].value);
+    const budget = parseFloat((e.currentTarget[4] as HTMLInputElement).value);
+    const duration = parseInt((e.currentTarget[5] as HTMLInputElement).value);
 
     const newTrip = {
-      name: putCapLet(e.target[0].value.toLowerCase()),
-      user: putCapLet(e.target[1].value.toLowerCase()),
-      depCity: putCapLet(e.target[2].value.toLowerCase()),
-      arrCity: putCapLet(e.target[3].value.toLowerCase()),
+      name: putCapLet((e.currentTarget[0] as HTMLInputElement).value.toLowerCase()),
+      user: putCapLet((e.currentTarget[1] as HTMLInputElement).value.toLowerCase()),
+      depCity: putCapLet((e.currentTarget[2] as HTMLInputElement).value.toLowerCase()),
+      arrCity: putCapLet((e.currentTarget[3] as HTMLInputElement).value.toLowerCase()),
       budget: budget,
       duration: duration,
     };
 
-    console.log(newTrip);
-    // Send to back-End
     const response = await postTrip(newTrip);
 
     if (response!.data.id) {
       setcurrentTrip(response!.data);
       navigate(`/trip/${response!.data.id}`);
     }
-
-    e.target.reset();
   };
 
   return (

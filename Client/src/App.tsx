@@ -13,10 +13,17 @@ import Modify from './Components/Modifiy/Modify';
 import './App.css'
 import { Trip, TripContextValue } from './types/types';
 
-
-
-//@ts-ignore
-export const TripContext = createContext<TripContextValue>(null);
+export const TripContext = createContext<TripContextValue>({
+  currentTrip: {
+    name: '',
+    user: '',
+    depCity: '',
+    arrCity: '',
+    budget: 0,
+    duration: 0,
+  },
+  setcurrentTrip: () => {},
+});
 
 function App() {
 

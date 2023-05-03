@@ -70,7 +70,7 @@ function Modify() {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -97,7 +97,7 @@ function Modify() {
         })
       );
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -173,7 +173,6 @@ function Modify() {
   };
 
   const handleAddJourney = async function (e: React.FormEvent<HTMLFormElement>) {
-    console.log("adding a journey");
     e.preventDefault();
   
     if (trip !== null && trip.id !== undefined) {
@@ -191,7 +190,6 @@ function Modify() {
         idTrip: trip.id,
       };
     
-      console.log("newjourney", newJourney);
     
       await postJourney(newJourney);
       
@@ -227,7 +225,6 @@ function Modify() {
   };
 
   const renderTrips = () => {
-    // console.log(trips)
     if (searchResult === false) {
       return <h2>No trips found for this user</h2>;
     } else {      
@@ -340,11 +337,8 @@ function Modify() {
   };
 
   const renderEdit = () => {
-    // const { currentTrip, setcurrentTrip } = useContext(TripContext);
-
-    // console.log("trips", trips);
-    function handleOnChange(e: any) {
-      setTrip({ ...trip, name: (e.target as HTMLInputElement).value || '' });
+    function handleOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+      setTrip({ ...trip, name: e.currentTarget.value || '' });
     }
     
     return (
