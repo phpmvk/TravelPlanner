@@ -1,61 +1,58 @@
-/* global require, module */
-// const { prisma } = require('../prisma');
-
-const { PrismaClient } = require('@prisma/client');
-
+import { PrismaClient } from '@prisma/client';
+import { Request, Response } from 'express';
+import { Trip } from '../types/types';
 const prisma = new PrismaClient();
 
-const controller = {};
-
-function lowerCase(string) {
+function lowerCase(string: string) {
   return string.toLowerCase();
 }
 
-const putCapLet = function (string) {
+const putCapLet = function (string: string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
-controller.getAllTrips = async (req, res) => {
+export const getAllTrips = async (req: Request, res: Response) => {
   try {
-    console.log('Calling getallTrips');
     const trips = await prisma.trip.findMany({});
     res.json(trips);
     res.status(200);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(400);
   }
 };
 
-controller.getActivitiesList = async (req, res) => {
+export const getActivitiesList = async (req: Request, res: Response) => {
   try {
-    console.log('Calling getActivitiesList');
     const trips = await prisma.activity.findMany({});
     res.json(trips);
     res.status(200);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(400);
   }
 };
 
-controller.getSearchTrips = async (req, res) => {
+export const getSearchTrips = async (req: Request, res: Response) => {
   try {
     const a = req.query;
+    let activityArray: string[] = [];
     if (typeof a.activities === 'string') {
-      a.activities = a.activities.split(' ');
+      activityArray = a.activities.split(' ');
     }
     if (!a.activities) {
       res.status(400).send();
       return;
     }
 
-    const searchItemsArr = a.activities.map(lowerCase).map(putCapLet);
-    const budgetTrip = a.budget;
-    const depCityTrip = putCapLet(lowerCase(a.depCity));
+    const searchItemsArr = activityArray.map((string) =>
+      putCapLet(string.toLowerCase())
+    );
+    const budgetTrip: number = +a.budget!;
+    const depCityTrip = putCapLet(lowerCase(a.depCity!.toString()));
     const durationTrip = a.duration;
 
-    const getTrips = await prisma.trip.findMany({
+    const getTrips: Trip[] = await prisma.trip.findMany({
       where: {
         activities: {
           some: {
@@ -72,19 +69,18 @@ controller.getSearchTrips = async (req, res) => {
     });
 
     const results = getTrips
-      .filter((trip) => trip.budget <= budgetTrip)
-      .filter((trip) => trip.depCity === depCityTrip)
-      .filter((trip) => trip.duration <= durationTrip);
+      .filter((trip: Trip) => trip.budget <= +budgetTrip!)
+      .filter((trip: Trip) => trip.depCity === depCityTrip)
+      .filter((trip: Trip) => trip.duration! <= +durationTrip!);
     res.json(results);
     res.status(200);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
   }
 };
 
-controller.getTripById = async (req, res) => {
-  console.log('function getTripById called');
+export const getTripById = async (req: Request, res: Response) => {
   const { id } = req.params;
   try {
     const trips = await prisma.trip.findUnique({
@@ -102,12 +98,12 @@ controller.getTripById = async (req, res) => {
     }
     res.json(trips);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
   }
 };
 
-controller.createTrip = async (req, res) => {
+export const createTrip = async (req: Request, res: Response) => {
   try {
     const { name, user, depCity, arrCity, budget, duration } = req.body;
     if (!name || !user || !depCity || !budget) {
@@ -126,12 +122,12 @@ controller.createTrip = async (req, res) => {
     });
     res.status(201).json(trip);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
   }
 };
 
-controller.createJourney = async (req, res) => {
+export const createJourney = async (req: Request, res: Response) => {
   try {
     const { start, end, depCity, arrCity, price, transportType, idTrip } =
       req.body;
@@ -160,12 +156,12 @@ controller.createJourney = async (req, res) => {
     });
     res.status(201).json(journey);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
   }
 };
 
-controller.createActivity = async (req, res) => {
+export const createActivity = async (req: Request, res: Response) => {
   try {
     const {
       start,
@@ -195,16 +191,15 @@ controller.createActivity = async (req, res) => {
     });
     res.status(201).json(activity);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     res.status(500);
   }
 };
 
-controller.getTripByUser = async (req, res) => {
-  console.log('function getTripByUser called');
+export const getTripByUser = async (req: Request, res: Response) => {
   if (req.query.user) {
     try {
-      const user = req.query.user;
+      const user = req.query.user as string | undefined;
       const trips = await prisma.trip.findMany({
         where: {
           user: user,
@@ -221,16 +216,16 @@ controller.getTripByUser = async (req, res) => {
       res.json(trips);
       res.status(200);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500);
     }
   } else if (req.query.idTrip) {
     try {
       const idTrip = req.query.idTrip;
-      if (!isNaN(idTrip)) {
+      if (!isNaN(+idTrip)) {
         const trips = await prisma.trip.findMany({
           where: {
-            id: parseInt(idTrip),
+            id: +idTrip,
           },
           include: {
             journeys: true,
@@ -248,7 +243,7 @@ controller.getTripByUser = async (req, res) => {
         res.status(400).send();
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500);
     }
   } else {
@@ -256,19 +251,19 @@ controller.getTripByUser = async (req, res) => {
   }
 };
 
-controller.deleteItem = async (req, res) => {
+export const deleteItem = async (req: Request, res: Response) => {
   if (req.query.idjourney) {
     const id = req.query.idjourney;
     try {
       const deletedJourney = await prisma.journey.delete({
         where: {
-          id: parseInt(id),
+          id: +id,
         },
       });
       res.json(deletedJourney);
       res.status(200);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500);
     }
   } else if (req.query.idactivity) {
@@ -277,13 +272,13 @@ controller.deleteItem = async (req, res) => {
     try {
       const deletedActivity = await prisma.activity.delete({
         where: {
-          id: parseInt(id),
+          id: +id,
         },
       });
       res.json(deletedActivity);
       res.status(200);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500);
     }
   } else if (req.query.idtrip) {
@@ -291,13 +286,13 @@ controller.deleteItem = async (req, res) => {
     try {
       const deletedTrip = await prisma.trip.delete({
         where: {
-          id: parseInt(id),
+          id: +id,
         },
       });
       res.json(deletedTrip);
       res.status(200);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       res.status(500);
     }
   } else {
@@ -305,7 +300,7 @@ controller.deleteItem = async (req, res) => {
   }
 };
 
-controller.modifyTrip = async (req, res) => {
+export const modifyTrip = async (req: Request, res: Response) => {
   const id = req.query.idtrip2;
   if (!id) {
     res.status(400).send();
@@ -336,5 +331,3 @@ controller.modifyTrip = async (req, res) => {
     res.status(500).json({ message: 'Error updating trip' });
   }
 };
-
-module.exports = controller;

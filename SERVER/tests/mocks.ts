@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   tripData: {
     name: 'Test Trip',
     user: 'Test User',
