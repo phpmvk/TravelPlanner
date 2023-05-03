@@ -2,7 +2,7 @@
 
 describe('example to-do app', () => {
 
-  it('creates a trip and adds an activity and journey', ()=> {
+  it('creates a trip and adds an activity and journey, then deletes ALL of it', ()=> {
     cy.visit('http://localhost:5173')
     cy.contains('Post').click()
     cy.get('[data-testid="tripNameInput"]').type('putCapLet Trip')
@@ -34,6 +34,7 @@ describe('example to-do app', () => {
     cy.get('[data-testid="price"]').type('100')
     cy.get('[data-testid="transportType"]').type('El Avion')
     cy.get('button').contains('Create').click();
+    cy.get('button').contains('Delete Trip').click();
   })
 
 
@@ -42,7 +43,8 @@ describe('example to-do app', () => {
     cy.get('[data-test-id="test-example"]').should('have.length', 3)
     cy.contains('Modify Trip').click()
     cy.get('[data-testid="userNameInput"]').type('theFrog')
-    cy.contains('Find Trips').click() 
+    cy.contains('Find Trips').click()
+    // cy.get('button').contains('Delete Trip').click();
   })
 
   it('Access Explore, and search for trips by activity', () => {
@@ -55,12 +57,6 @@ describe('example to-do app', () => {
     cy.get('[id="activitySelect"]').select('Eatfrogs')
     cy.get('button').contains('Search').click();
     
-
-    
-
-
   })
-
-
 
 });

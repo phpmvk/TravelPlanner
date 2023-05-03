@@ -1,26 +1,17 @@
-//@ts-nocheck
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 
 import { TripContext } from "../../App";
 import { postTrip } from "../../api.service";
+import { putCapLet } from "../../utils/utils";
 
 import "./Post.css";
 
 function Post() {
-  //@ts-ignore
   const { setcurrentTrip } = useContext(TripContext);
   // const [error, setError] = useState('');
 
   const navigate = useNavigate();
-
-  const putCapLet = function (string: any) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
-  function lowerCase(string: any ) {
-    return string.toLowerCase();
-  }
 
   const handleSubmit = async function (e: any) {
     e.preventDefault();
@@ -29,10 +20,10 @@ function Post() {
     const duration = parseInt(e.target[5].value);
 
     const newTrip = {
-      name: putCapLet(lowerCase(e.target[0].value)),
-      user: putCapLet(lowerCase(e.target[1].value)),
-      depCity: putCapLet(lowerCase(e.target[2].value)),
-      arrCity: putCapLet(lowerCase(e.target[3].value)),
+      name: putCapLet(e.target[0].value.toLowerCase()),
+      user: putCapLet(e.target[1].value.toLowerCase()),
+      depCity: putCapLet(e.target[2].value.toLowerCase()),
+      arrCity: putCapLet(e.target[3].value.toLowerCase()),
       budget: budget,
       duration: duration,
     };
@@ -41,9 +32,9 @@ function Post() {
     // Send to back-End
     const response = await postTrip(newTrip);
 
-    if (response.data.id) {
-      setcurrentTrip(response.data);
-      navigate(`/trip/${response.data.id}`);
+    if (response!.data.id) {
+      setcurrentTrip(response!.data);
+      navigate(`/trip/${response!.data.id}`);
     }
 
     e.target.reset();

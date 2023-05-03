@@ -1,10 +1,10 @@
-//@ts-nocheck
 import { useNavigate, Link } from "react-router-dom";
 import { parseISO } from "date-fns";
-import { useContext, React } from "react";
+import { useContext } from "react";
 
 import { postJourney } from "../../api.service";
 import { TripContext } from "../../App";
+import { putCapLet } from "../../utils/utils";
 
 import "./Journey.css";
 
@@ -13,40 +13,28 @@ function Journey() {
 
   const navigate = useNavigate();
 
-  const putCapLet = function (string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
-  function lowerCase(string) {
-    return string.toLowerCase();
-  }
-
   function handleCancelJourney() {
     navigate(`/trip/${currentTrip.id}`);
   }
 
-  const handleSubmit = async function (e) {
+  const handleSubmit = async function (e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const start = parseISO(e.target[0].value);
-    const end = parseISO(e.target[1].value);
-    const price = parseFloat(e.target[4].value);
+    const start = parseISO((e.currentTarget[0] as HTMLInputElement).value);
+    const end = parseISO((e.currentTarget[1] as HTMLInputElement).value);
+    const price = parseFloat((e.currentTarget[4] as HTMLInputElement).value);
 
     const newJourney = {
       start: start,
       end: end,
-      depCity: putCapLet(lowerCase(e.target[2].value)),
-      arrCity: putCapLet(lowerCase(e.target[3].value)),
+      depCity: putCapLet((e.currentTarget[2] as HTMLInputElement).value.toLowerCase()),
+      arrCity: putCapLet((e.currentTarget[3] as HTMLInputElement).value.toLowerCase()),
       price: price,
-      transportType: putCapLet(lowerCase(e.target[5].value)),
-      idTrip: currentTrip.id,
+      transportType: putCapLet((e.currentTarget[5] as HTMLInputElement).value.toLowerCase()),
+      idTrip: currentTrip.id!,
     };
 
-    console.log("newjourney", newJourney);
-
-    const journeyNew = await postJourney(newJourney);
-
-    e.target.reset();
+    await postJourney(newJourney);
 
     navigate(`/trip/${currentTrip.id}`);
   };

@@ -8,13 +8,13 @@ export function diffMinutes(date1: Date, date2: Date) {
 
 export function extractStartDates(trip: Trip) {
   const startDates: Date[] = [];
-  if (trip.activities.length) {
-    trip.activities.forEach((activity) => {
+  if (trip.activities!.length) {
+    trip.activities!.forEach((activity) => {
       startDates.push(new Date(activity.start));
     });
   }
-  if (trip.journeys.length) {
-    trip.journeys.forEach((journey) => {
+  if (trip.journeys!.length) {
+    trip.journeys!.forEach((journey) => {
       startDates.push(new Date(journey.start));
     });
   }
@@ -46,4 +46,6 @@ export function extractEndDates(trip: Trip) {
   }
 }
 
-// export function putCapLet()
+export function putCapLet(input: string) {
+  return input.charAt(0).toUpperCase() + input.slice(1);
+}

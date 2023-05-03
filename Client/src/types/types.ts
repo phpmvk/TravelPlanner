@@ -8,8 +8,8 @@ export interface Trip {
   duration?: number,
   start?: Date,
   end?: Date,
-  journeys: Journey[],
-  activities: Activity[],
+  journeys?: Journey[],
+  activities?: Activity[],
 }
 
 export interface Journey {
@@ -41,3 +41,8 @@ export interface Activity {
 }
 
 export type JourneyAndActivity = Journey | Activity
+
+export interface TripContextValue {
+  currentTrip: Trip;
+  setcurrentTrip: React.Dispatch<React.SetStateAction<Trip>>;
+}

@@ -15,7 +15,7 @@ import {
   getTripById,
 } from "../../api.service";
 
-import { diffMinutes } from "../../utils/utils";
+import { diffMinutes, putCapLet } from "../../utils/utils";
 import { Activity, Journey, JourneyAndActivity, Trip } from "../../types/types";
 
 function Modify() {
@@ -34,17 +34,9 @@ function Modify() {
   const [searchResult, setSearchResult] = useState(false);
   const [isViewMode, setMode] = useState("viewMode");
 
-  const putCapLet = function (string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  };
-
   const prettyDate = function (date: Date) {
     return moment(date).format("dddd HH:mm");
   };
-
-  function lowerCase(string: string) {
-    return string.toLowerCase();
-  }
 
   function formatDuration(minutes: number) {
     const hours = Math.floor(minutes / 60);
@@ -66,7 +58,7 @@ function Modify() {
 
       setTrips((prevState) =>
         prevState.map((trip) => {
-          const updatedJourneys = trip.journeys.filter(
+          const updatedJourneys = trip.journeys!.filter(
             (journey) => journey.id !== journ.id
           );
           return {
@@ -93,7 +85,7 @@ function Modify() {
 
       setTrips((prevState) =>
         prevState.map((trip) => {
-          const updatedActivities = trip.activities.filter(
+          const updatedActivities = trip.activities!.filter(
             (activity) => activity.id !== activ.id
           );
           return {
@@ -112,8 +104,8 @@ function Modify() {
   const handleDeleteTrip = async (tripId: number) => {
     try {
       const currentTrip = trips.find((trip) => trip.id === tripId);
-      currentTrip!.activities.map(async (activity) => await deleteActivity(activity));
-      currentTrip!.journeys.map(async (journey) => await deleteJourney(journey));
+      await Promise.all(currentTrip!.activities!.map(async (activity) => deleteActivity(activity)));
+      await Promise.all(currentTrip!.journeys!.map(async (journey) => deleteJourney(journey)));
       await deleteTrip(tripId);
       setTrips((prevState) => prevState.filter((trip) => trip.id !== tripId));
     } catch (error) {
@@ -131,7 +123,7 @@ function Modify() {
   
     const inputElement = e.currentTarget[0] as HTMLInputElement;
   
-    const user = putCapLet(lowerCase(inputElement.value))
+    const user = putCapLet(inputElement.value.toLowerCase())
   
     fetchTripsByUser(user);
   
@@ -192,10 +184,10 @@ function Modify() {
       const newJourney: Journey = {
         start: start,
         end: end,
-        depCity: putCapLet(lowerCase((e.currentTarget[2] as HTMLInputElement).value)),
-        arrCity: putCapLet(lowerCase((e.currentTarget[3] as HTMLInputElement).value)),
+        depCity: putCapLet((e.currentTarget[2] as HTMLInputElement).value.toLowerCase()),
+        arrCity: putCapLet((e.currentTarget[3] as HTMLInputElement).value.toLowerCase()),
         price: price,
-        transportType: putCapLet(lowerCase((e.currentTarget[5] as HTMLInputElement).value)),
+        transportType: putCapLet((e.currentTarget[5] as HTMLInputElement).value.toLowerCase()),
         idTrip: trip.id,
       };
     
@@ -220,11 +212,11 @@ function Modify() {
       const newActivity = {
         start: start,
         end: end,
-        depCity: putCapLet(lowerCase((e.currentTarget[2] as HTMLInputElement).value)),
-        arrCity: putCapLet(lowerCase((e.currentTarget[3] as HTMLInputElement).value)),
+        depCity: putCapLet((e.currentTarget[2] as HTMLInputElement).value.toLowerCase()),
+        arrCity: putCapLet((e.currentTarget[3] as HTMLInputElement).value.toLowerCase()),
         price: price,
-        activityType: putCapLet(lowerCase((e.currentTarget[5] as HTMLInputElement).value)),
-        additionalInfo: putCapLet(lowerCase((e.currentTarget[6] as HTMLInputElement).value)),
+        activityType: putCapLet((e.currentTarget[5] as HTMLInputElement).value.toLowerCase()),
+        additionalInfo: putCapLet((e.currentTarget[6] as HTMLInputElement).value.toLowerCase()),
         idTrip: trip.id,
       };
 
@@ -235,7 +227,7 @@ function Modify() {
   };
 
   const renderTrips = () => {
-    console.log(trips)
+    // console.log(trips)
     if (searchResult === false) {
       return <h2>No trips found for this user</h2>;
     } else {      
@@ -243,12 +235,12 @@ function Modify() {
       let journeyAndActivities: JourneyAndActivity[]
   
   
-        const journeyArray: Journey[] = trip!.journeys;
-        const activitiesArray: Activity[] = trip!.activities;
-        journeyAndActivities = [...journeyArray, ...activitiesArray]
+        const journeyArray: Journey[] | undefined = trip!.journeys;
+        const activitiesArray: Activity[] | undefined = trip!.activities;
+
+        journeyAndActivities = [...journeyArray!, ...activitiesArray!]
   
         journeyAndActivities.sort((a, b) => +new Date(a.start) - +new Date(b.start))
-        console.log('><><><><><><><><><><><',journeyAndActivities)
       return (
         <div className="trip-card" key={trip.id}>
           <h1>{trip.name}</h1>
@@ -350,7 +342,7 @@ function Modify() {
   const renderEdit = () => {
     // const { currentTrip, setcurrentTrip } = useContext(TripContext);
 
-    console.log("trips", trips);
+    // console.log("trips", trips);
     function handleOnChange(e: any) {
       setTrip({ ...trip, name: (e.target as HTMLInputElement).value || '' });
     }

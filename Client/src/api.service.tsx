@@ -27,7 +27,7 @@ export const postJourney = async (journey: Journey) => {
     trip[0].duration = Number(
       diffMinutes(new Date(trip[0].start), new Date(trip[0].end))
     );
-    updateTrip(trip[0]);
+    await updateTrip(trip[0]);
 
     const journeys = await axios.post(rootUrl + 'journey', journey)
     return journeys;
@@ -70,7 +70,7 @@ export const deleteJourney = async (journey: Journey | Activity) => {
     trip[0].duration = Number(
       diffMinutes(new Date(trip[0].start), new Date(trip[0].end))
     );
-    updateTrip(trip[0]);
+    await updateTrip(trip[0]);
 
     return responseJourney;
   } catch (error) {
@@ -79,6 +79,7 @@ export const deleteJourney = async (journey: Journey | Activity) => {
 };
 
 export const deleteActivity = async (activity: Activity | Journey) => {
+  console.log('-0-0-0-0-0-0 DELETE the ACTIVITY')
   try {
     const activities = axios.delete(rootUrl + 'modify?idactivity=' + activity.id)
     const trip = await getTripById(activity.idTrip);
@@ -112,7 +113,7 @@ export const deleteActivity = async (activity: Activity | Journey) => {
     trip[0].duration = Number(
       diffMinutes(new Date(trip[0].start), new Date(trip[0].end))
     );
-    updateTrip(trip[0]);
+    await updateTrip(trip[0]);
 
     return activities;
   } catch (error) {
@@ -134,7 +135,7 @@ export const postActivity = async (activity: Activity) => {
     trip[0].duration = Number(
       diffMinutes(new Date(trip[0].start), new Date(trip[0].end))
     );
-    updateTrip(trip[0]);
+    await updateTrip(trip[0]);
 
     const leActivitys = await axios.post(rootUrl + 'activity', activity)
     return leActivitys;
@@ -192,6 +193,7 @@ export const deleteTrip = async (tripId: number) => {
 
 export const updateTrip = async (trip: Trip) => {
   try {
+    console.log('-0-0-0-0-0-0 were in the updateTrip')
     const response = await axios.put(rootUrl + 'modify?idtrip2=' + trip.id, trip)
     return response.data;
   } catch (error) {
