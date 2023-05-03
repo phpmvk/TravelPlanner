@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import React from "react";
 
 import Logo from "../../assets/Logo2.png";
 import "./Home.css";

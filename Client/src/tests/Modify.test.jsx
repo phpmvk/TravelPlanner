@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/react';
-import App from '../App.jsx';
+import App from '../App';
 import userEvent from '@testing-library/user-event';
 import { expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import Modify from '../Components/Modifiy/Modify.jsx';
+import Modify from '../Components/Modifiy/Modify';
 
 describe('Modify Trip', () => {
   it('clicking on Modify Trip from <App /> should navigate to modify page', async () => {

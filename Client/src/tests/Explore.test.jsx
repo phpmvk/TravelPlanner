@@ -1,9 +1,10 @@
-import { cleanup, render, screen } from '@testing-library/react';
-import App from '../App.jsx';
+import { render, screen } from '@testing-library/react';
+import App from '../App';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, expect } from 'vitest';
-import Explore from '../Components/Explore/Explore.jsx';
+import { expect } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
+import Explore from '../Components/Explore/Explore';
+
 
 
 describe('Explore', () => {
@@ -18,7 +19,7 @@ describe('Explore', () => {
   test('should render a form with input fields and a \'Search\' button', ()=> {
     render(
      <MemoryRouter>
-      <Explore />
+        <Explore />
      </MemoryRouter> 
      );
     const form = screen.getByRole('searchForm');
