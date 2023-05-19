@@ -1,26 +1,19 @@
-const request = require('supertest');
-const { PrismaClient } = require('@prisma/client');
-const { server, app } = require('../index');
+import request from 'supertest';
+import { PrismaClient } from '@prisma/client';
+import { server, app } from '../src/index';
+import { Trip } from '../src/types/types';
+import { beforeEach } from 'jest-circus';
 const prisma = new PrismaClient();
 
-const {
-  tripData,
-  journeyData,
-  activityData,
-  updatedTripData,
-  badTripData,
-  badJourneyData,
-  badUpdatedTripData,
-  badActivityData,
-} = require('./mocks');
+import { default as mocks } from './mocks';
 
 beforeEach(() => {
   jest.clearAllMocks();
 });
 
 afterAll(async () => {
-  await prisma.$disconnect(); // Close the Prisma client
-  server.close(); // Close the Express server
+  await prisma.$disconnect();
+  server.close();
 });
 
 describe('UNIT TESTS', () => {
@@ -44,92 +37,92 @@ describe('UNIT TESTS', () => {
   });
 
   describe('POST /post - createTrip', () => {
-    // Test createTrip route
     it('Should create a new trip and return the created trip with status 201', async () => {
-      const res = await request(app).post('/post').send(tripData);
+      const res = await request(app).post('/post').send(mocks.tripData);
 
       expect(res.statusCode).toEqual(201);
-      expect(res.body).toHaveProperty('name', tripData.name);
-      expect(res.body).toHaveProperty('user', tripData.user);
-      expect(res.body).toHaveProperty('depCity', tripData.depCity);
-      expect(res.body).toHaveProperty('arrCity', tripData.arrCity);
-      expect(res.body).toHaveProperty('budget', tripData.budget);
-      expect(res.body).toHaveProperty('duration', tripData.duration);
+      expect(res.body).toHaveProperty('name', mocks.tripData.name);
+      expect(res.body).toHaveProperty('user', mocks.tripData.user);
+      expect(res.body).toHaveProperty('depCity', mocks.tripData.depCity);
+      expect(res.body).toHaveProperty('arrCity', mocks.tripData.arrCity);
+      expect(res.body).toHaveProperty('budget', mocks.tripData.budget);
+      expect(res.body).toHaveProperty('duration', mocks.tripData.duration);
     });
     it('Should return status 400 if required input field is missing', async () => {
-      const res = await request(app).post('/post').send(badTripData);
+      const res = await request(app).post('/post').send(mocks.badTripData);
 
       expect(res.statusCode).toEqual(400);
     });
   });
 
   describe('POST /journey - createJourney', () => {
-    // Test createJourney route
     it('Should create a new journey and return the created journey with status 200', async () => {
-      const resTrip = await request(app).post('/post').send(tripData);
+      const resTrip = await request(app).post('/post').send(mocks.tripData);
       const idTrip = resTrip.body.id;
-      journeyData.idTrip = idTrip;
-      const res = await request(app).post('/journey').send(journeyData);
+      mocks.journeyData.idTrip = idTrip;
+      const res = await request(app).post('/journey').send(mocks.journeyData);
 
       expect(res.statusCode).toEqual(201);
       expect(res.body).toMatchObject({
-        idTrip: journeyData.idTrip,
-        depCity: journeyData.depCity,
-        arrCity: journeyData.arrCity,
-        price: journeyData.price,
-        transportType: journeyData.transportType,
+        idTrip: mocks.journeyData.idTrip,
+        depCity: mocks.journeyData.depCity,
+        arrCity: mocks.journeyData.arrCity,
+        price: mocks.journeyData.price,
+        transportType: mocks.journeyData.transportType,
       });
       expect(new Date(res.body.start).getTime()).toBeCloseTo(
-        new Date(journeyData.start).getTime(),
+        new Date(mocks.journeyData.start).getTime(),
         -2
       );
       expect(new Date(res.body.end).getTime()).toBeCloseTo(
-        new Date(journeyData.end).getTime(),
+        new Date(mocks.journeyData.end).getTime(),
         -2
       );
     });
     it('Should return status 400 if required input field is missing', async () => {
-      const res = await request(app).post('/journey').send(badJourneyData);
+      const res = await request(app)
+        .post('/journey')
+        .send(mocks.badJourneyData);
 
       expect(res.statusCode).toEqual(400);
     });
   });
 
   describe('POST /activity - createActivity', () => {
-    // Test createActivity route
     it('Should create a new activity and return the created activity with status 200', async () => {
-      const resTrip = await request(app).post('/post').send(tripData);
+      const resTrip = await request(app).post('/post').send(mocks.tripData);
       const idTrip = resTrip.body.id;
-      activityData.idTrip = idTrip;
-      const res = await request(app).post('/activity').send(activityData);
+      mocks.activityData.idTrip = idTrip;
+      const res = await request(app).post('/activity').send(mocks.activityData);
 
       expect(res.statusCode).toEqual(201);
       expect(res.body).toMatchObject({
-        idTrip: activityData.idTrip,
-        depCity: activityData.depCity,
+        idTrip: mocks.activityData.idTrip,
+        depCity: mocks.activityData.depCity,
         arrCity: null,
-        price: activityData.price,
-        activityType: activityData.activityType,
-        additionalInfo: activityData.additionalInfo,
+        price: mocks.activityData.price,
+        activityType: mocks.activityData.activityType,
+        additionalInfo: mocks.activityData.additionalInfo,
       });
       expect(new Date(res.body.start).getTime()).toBeCloseTo(
-        new Date(activityData.start).getTime(),
+        new Date(mocks.activityData.start).getTime(),
         -2
       );
       expect(new Date(res.body.end).getTime()).toBeCloseTo(
-        new Date(activityData.end).getTime(),
+        new Date(mocks.activityData.end).getTime(),
         -2
       );
     });
     it('Should return status 400 if required input field is missing', async () => {
-      const res = await request(app).post('/activity').send(badActivityData);
+      const res = await request(app)
+        .post('/activity')
+        .send(mocks.badActivityData);
 
       expect(res.statusCode).toEqual(400);
     });
   });
 
   describe('GET /trip:id - getTripById', () => {
-    // Test getTripById route
     it('Should return a trip with the specified ID and status 200', async () => {
       const id = 1;
       const res = await request(app).get(`/trip/${id}`);
@@ -145,16 +138,15 @@ describe('UNIT TESTS', () => {
   });
 
   describe('GET /modify - getTripByUser', () => {
-    // Test getTripByUser route
     it('Should return an array of trips with the specified user and status 200', async () => {
-      await request(app).post('/post').send(tripData);
+      await request(app).post('/post').send(mocks.tripData);
 
       const user = 'Test User';
       const res = await request(app).get('/modify').query({ user });
 
       expect(res.statusCode).toEqual(200);
       expect(Array.isArray(res.body)).toBe(true);
-      res.body.forEach((trip) => {
+      res.body.forEach((trip: Trip) => {
         expect(trip).toHaveProperty('user', user);
       });
     });
@@ -172,9 +164,8 @@ describe('UNIT TESTS', () => {
   });
 
   describe('DELETE /modify - deleteItem', () => {
-    // Test deleteItem route (for trip)
     it('Should delete a trip with the specified ID and return the deleted trip with status 200', async () => {
-      const postRes = await request(app).post('/post').send(tripData);
+      const postRes = await request(app).post('/post').send(mocks.tripData);
       let idtrip = postRes.body.id;
 
       const res = await request(app).delete('/modify').query({ idtrip });
@@ -184,11 +175,13 @@ describe('UNIT TESTS', () => {
     });
 
     it('Should delete a journey with the specified ID and return the deleted journey with status 200', async () => {
-      const resTrip = await request(app).post('/post').send(tripData);
+      const resTrip = await request(app).post('/post').send(mocks.tripData);
       const idTrip = resTrip.body.id;
-      journeyData.idTrip = idTrip;
+      mocks.journeyData.idTrip = idTrip;
 
-      const resJourney = await request(app).post('/journey').send(journeyData);
+      const resJourney = await request(app)
+        .post('/journey')
+        .send(mocks.journeyData);
 
       const idjourney = resJourney.body.id;
       const res = await request(app).delete('/modify').query({ idjourney });
@@ -198,13 +191,13 @@ describe('UNIT TESTS', () => {
     });
 
     it('Should delete an activity with the specified ID and return the deleted activity with status 200', async () => {
-      const resTrip = await request(app).post('/post').send(tripData);
+      const resTrip = await request(app).post('/post').send(mocks.tripData);
       const idTrip = resTrip.body.id;
-      activityData.idTrip = idTrip;
+      mocks.activityData.idTrip = idTrip;
 
       const resActivity = await request(app)
         .post('/activity')
-        .send(activityData);
+        .send(mocks.activityData);
 
       const idactivity = resActivity.body.id;
 
@@ -222,24 +215,23 @@ describe('UNIT TESTS', () => {
   });
 
   describe('PUT /modify - modifyTrip', () => {
-    // Test modifyTrip route
     it('Should update a trip with the specified ID and return the updated trip with status 200', async () => {
-      const postRes = await request(app).post('/post').send(tripData);
+      const postRes = await request(app).post('/post').send(mocks.tripData);
       const idtrip2 = postRes.body.id;
       const res = await request(app)
         .put('/modify')
         .query({ idtrip2 })
-        .send({ ...updatedTripData });
+        .send({ ...mocks.updatedTripData });
 
       expect(res.statusCode).toEqual(200);
       expect(res.body.id).toBe(idtrip2);
 
       expect(new Date(res.body.start).getTime()).toBeCloseTo(
-        new Date(updatedTripData.start).getTime(),
+        new Date(mocks.updatedTripData.start).getTime(),
         -2
       );
       expect(new Date(res.body.end).getTime()).toBeCloseTo(
-        new Date(updatedTripData.end).getTime(),
+        new Date(mocks.updatedTripData.end).getTime(),
         -2
       );
     });
@@ -251,7 +243,6 @@ describe('UNIT TESTS', () => {
   });
 
   describe('GET /explore - getActivitiesList', () => {
-    // Test getActivitiesList route
     it('Should return an array of all activities with status 200', async () => {
       const res = await request(app).get('/explore');
 

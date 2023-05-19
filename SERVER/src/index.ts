@@ -1,11 +1,11 @@
-const express = require('express');
-const router = require('./routes/router');
-const cors = require('cors');
-const http = require('http');
+import express from 'express';
+import router from './routes/router';
+import cors from 'cors';
+import http from 'http';
 
 const PORT = process.env.PORT || 3001;
 
-const app = new express();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
@@ -17,4 +17,4 @@ server.listen(PORT, () => {
   console.log(`server is listenning on http://localhost:${PORT}`);
 });
 
-module.exports = { server, app };
+export { server, app };
